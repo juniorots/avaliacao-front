@@ -80,7 +80,7 @@ export default class MainCliente extends Component {
                                 type="button"
                                 onClick="{this.searchCliente}">
                                     Pesquisar
-                                </button>
+                            </button>
                         </div>
                     </div>
                 </div>
