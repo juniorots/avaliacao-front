@@ -83,7 +83,7 @@ export default class MainCliente extends Component {
             nomePesquisa, cpf, searchEvent, endereco, telefone, email } = this.state;
         return(
             <div className="list_row">
-                <div className="col-md-10">
+                <div className="col-md-8">
                     <div className="input-group mb-3">
                         <input 
                             type="text"
@@ -120,7 +120,7 @@ export default class MainCliente extends Component {
                             <input
                                 type="text"
                                 className="form-control"
-                                style={styleInput}
+                                style={styleMediumInput}
                                 id="cpf"
                                 placeHolder="CPF"
                                 required
@@ -128,33 +128,53 @@ export default class MainCliente extends Component {
                                 onChange={value => this.onChangeHandler("nomeCliente", value)}
                             />
                             
-                            <input
-                                type="text"
-                                className="form-control"
-                                style={styleInput}
-                                id="telefone"
-                                placeHolder="TELEFONE"
-                                required
-                                value={telefone}
-                                onChange={value => this.onChangeHandler("telefone", value)}
-                            />
+                            <div className="input-group mb-3">
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    style={styleShortInput}
+                                    id="telefone"
+                                    placeHolder="TELEFONE"
+                                    required
+                                    value={telefone}
+                                    onChange={value => this.onChangeHandler("telefone", value)}
+                                />
+                                <div className="input-group-append">
+                                    <button 
+                                        className="btn btn-outline-secondary"
+                                        type="button"
+                                        onClick="{this.addTelefone}">
+                                            Adicionar
+                                    </button>
+                                 </div>
+                            </div>
 
-                            <input
-                                type="text"
-                                className="form-control"
-                                style={styleInput}
-                                id="email"
-                                placeHolder="E-MAIL"
-                                required
-                                value={email}
-                                onChange={value => this.onChangeHandler("email", value)}
-                            />   
+                            <div className="input-group mb-3">
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    style={styleMediumInput}
+                                    id="email"
+                                    placeHolder="E-MAIL"
+                                    required
+                                    value={email}
+                                    onChange={value => this.onChangeHandler("email", value)}
+                                />   
+                                <div className="input-group-append">
+                                    <button 
+                                        className="btn btn-outline-secondary"
+                                        type="button"
+                                        onClick="{this.addEmail}">
+                                            Adicionar
+                                    </button>
+                                 </div>
+                            </div>
 
                             <h5 style={styleTitulo}>Endereço</h5>
                             <input
                                 type="text"
                                 className="form-control"
-                                style={styleInput}
+                                style={styleShortInput}
                                 id="cep"
                                 placeHolder="CEP"
                                 required
@@ -174,7 +194,7 @@ export default class MainCliente extends Component {
                             <input
                                 type="text"
                                 className="form-control"
-                                style={styleInput}
+                                style={styleMediumInput}
                                 id="bairro"
                                 placeHolder="BAIRRO"
                                 required
@@ -184,7 +204,7 @@ export default class MainCliente extends Component {
                             <input
                                 type="text"
                                 className="form-control"
-                                style={styleInput}
+                                style={styleMediumInput}
                                 id="cidade"
                                 placeHolder="CIDADE"
                                 required
@@ -194,7 +214,7 @@ export default class MainCliente extends Component {
                             <input
                                 type="text"
                                 className="form-control"
-                                style={styleInput}
+                                style={styleShortInput}
                                 id="uf"
                                 placeHolder="UF"
                                 required
@@ -227,7 +247,7 @@ export default class MainCliente extends Component {
                         (searchEvent && 
                             <div>
                                 <br />
-                                <p>Cliente não localizado :-(</p>
+                                <p style={styleTitulo}>Cliente não localizado :-(</p>
                             </div> 
                         )
                     )}
@@ -240,7 +260,20 @@ export default class MainCliente extends Component {
 
 const styleInput = {
     marginRight: 5,   
-    marginBottom: 5
+    marginBottom: 5,
+    width: 600
+}
+const styleMediumInput = {
+    marginBottom: 5,
+    marginleft: 5,
+    marginRight: 5,
+    width: 300
+}
+const styleShortInput = {
+    marginBottom: 5,
+    marginleft: 5,
+    marginRight: 5,
+    width: 150
 }
 const styleTitulo = {
     paddingTop: 10,

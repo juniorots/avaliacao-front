@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet } from "react-native";
+import { Text } from "react-native";
 import Alert from "react-bootstrap/Alert";
 import ClienteService from "../services/avaliacao.service";
 
@@ -74,6 +74,7 @@ export default class AddCliente extends Component {
                         </Alert.Link>
                     </Alert>
                 ) : (
+                    <div className="col-md-8">
                     <div style={styleContainer}>
                         <h3 style={styleTitulo}>Preencha os dados</h3>
                         <input
@@ -83,14 +84,13 @@ export default class AddCliente extends Component {
                             id="nomeCliente"
                             placeHolder="Nome"
                             required
-                            size="20"
                             value={nomeCliente}
                             onChange={value => this.onChangeHandler("nomeCliente", value)}
                         />
                         <input
                             type="text"
                             className="form-control"
-                            style={styleInput}
+                            style={styleMediumInput}
                             id="cpf"
                             placeHolder="CPF"
                             required
@@ -98,33 +98,53 @@ export default class AddCliente extends Component {
                             onChange={value => this.onChangeHandler("nomeCliente", value)}
                         />
                         
-                        <input
-                            type="text"
-                            className="form-control"
-                            style={styleInput}
-                            id="telefone"
-                            placeHolder="TELEFONE"
-                            required
-                            value={telefone}
-                            onChange={value => this.onChangeHandler("telefone", value)}
-                        />
+                        <div className="input-group mb-3">
+                            <input
+                                type="text"
+                                className="form-control"
+                                style={styleShortInput}
+                                id="telefone"
+                                placeHolder="TELEFONE"
+                                required
+                                value={telefone}
+                                onChange={value => this.onChangeHandler("telefone", value)}
+                            />
+                            <div className="input-group-append">
+                                <button 
+                                    className="btn btn-outline-secondary"
+                                    type="button"
+                                    onClick="{this.addTelefone}">
+                                        Adicionar
+                                </button>
+                                </div>
+                        </div>
 
-                        <input
-                            type="text"
-                            className="form-control"
-                            style={styleInput}
-                            id="email"
-                            placeHolder="E-MAIL"
-                            required
-                            value={email}
-                            onChange={value => this.onChangeHandler("email", value)}
-                        />   
+                        <div className="input-group mb-3">
+                            <input
+                                type="text"
+                                className="form-control"
+                                style={styleMediumInput}
+                                id="email"
+                                placeHolder="E-MAIL"
+                                required
+                                value={email}
+                                onChange={value => this.onChangeHandler("email", value)}
+                            />   
+                            <div className="input-group-append">
+                                <button 
+                                    className="btn btn-outline-secondary"
+                                    type="button"
+                                    onClick="{this.addEmail}">
+                                        Adicionar
+                                </button>
+                                </div>
+                        </div>   
 
                         <h5 style={styleTitulo}>Endereço</h5>
                         <input
                             type="text"
                             className="form-control"
-                            style={styleInput}
+                            style={styleShortInput}
                             id="cep"
                             placeHolder="CEP"
                             required
@@ -144,7 +164,7 @@ export default class AddCliente extends Component {
                         <input
                             type="text"
                             className="form-control"
-                            style={styleInput}
+                            style={styleMediumInput}
                             id="bairro"
                             placeHolder="BAIRRO"
                             required
@@ -154,7 +174,7 @@ export default class AddCliente extends Component {
                         <input
                             type="text"
                             className="form-control"
-                            style={styleInput}
+                            style={styleMediumInput}
                             id="cidade"
                             placeHolder="CIDADE"
                             required
@@ -164,7 +184,7 @@ export default class AddCliente extends Component {
                         <input
                             type="text"
                             className="form-control"
-                            style={styleInput}
+                            style={styleShortInput}
                             id="uf"
                             placeHolder="UF"
                             required
@@ -185,6 +205,7 @@ export default class AddCliente extends Component {
                             Cadastrar
                         </button>
                     </div>
+                    </div>
                 )}
             </div>
         );
@@ -197,7 +218,20 @@ const styleContainer = {
 const styleInput = {
     marginBottom: 5,
     marginleft: 5,
-    marginRight: 5
+    marginRight: 5,
+    width: 600
+}
+const styleMediumInput = {
+    marginBottom: 5,
+    marginleft: 5,
+    marginRight: 5,
+    width: 300
+}
+const styleShortInput = {
+    marginBottom: 5,
+    marginleft: 5,
+    marginRight: 5,
+    width: 150
 }
 const styleTitulo = {
     paddingTop: 10,
