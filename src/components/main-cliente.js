@@ -9,12 +9,13 @@ export default class MainCliente extends Component {
         this.deleteCliente = this.deleteCliente.bind(this);
 
         this.state = {
-            cliente: null,
+            cliente: {nome:"teste"},
             idCliente: "",
             nomeCliente: "",
             nomePesquisa: "",
             operador: "",
-            found: false
+            found: true,
+            searchEvent: false
         };
     }
 
@@ -33,7 +34,13 @@ export default class MainCliente extends Component {
                 });
                 console.log(response.data);
             }).catch(e => {
+                this.setState({
+                    found: false
+                })
                 console.log(e) // :..-(
+            })
+            this.setState({
+                searchEvent: true
             })
     }
 
@@ -62,7 +69,7 @@ export default class MainCliente extends Component {
     }
 
     render() {
-        const { nomeCliente, cliente, found, nomePesquisa, cpf } = this.state;
+        const { nomeCliente, cliente, found, nomePesquisa, cpf, searchEvent } = this.state;
         return(
             <div className="list_row">
                 <div className="col-md-10">
@@ -70,6 +77,7 @@ export default class MainCliente extends Component {
                         <input 
                             type="text"
                             className="form-control"
+                            style={styleInput}
                             placeHolder="Digite o nome..."                        
                             value={nomePesquisa}
                             onChange={value => this.onChangeHandler("nomePesquisa", value)}
@@ -87,9 +95,11 @@ export default class MainCliente extends Component {
                 <div className="col-md-8">
                     {cliente ? (
                         <div className="edit-form">
+                            <h3 style={styleTitulo}>Informações do Cliente</h3>
                             <input
                                 type="text"
                                 className="form-control"
+                                style={styleInput}
                                 id="nomeCliente"
                                 placeHolder="Nome..."
                                 required
@@ -99,6 +109,7 @@ export default class MainCliente extends Component {
                             <input
                                 type="text"
                                 className="form-control"
+                                style={styleInput}
                                 id="cpf"
                                 placeHolder="CPF..."
                                 required
@@ -107,22 +118,24 @@ export default class MainCliente extends Component {
                             />
 
                             <button
-                                className="badge badge-danger mr-2"
+                                className="btn btn-success" style={styleButton}
                                 onClick={this.updateCliente} disabled={found === false}>
                                 Atualizar
                             </button>
 
                             <button
-                                className="badge badge-danger mr-2"
+                                className="btn btn-warning" style={styleButton}
                                 onClick={this.deleteCliente} disabled={found === false}>
                                 Apagar
                             </button>
                         </div>
                     ) : (
-                        <div>
-                        <br />
-                        <p>Cliente não localizado :-(</p>
-                    </div>
+                        (searchEvent && 
+                            <div>
+                                <br />
+                                <p>Cliente não localizado :-(</p>
+                            </div> 
+                        )
                     )}
                 </div>
 
@@ -130,4 +143,17 @@ export default class MainCliente extends Component {
        ); 
     }
 }
+
+const styleInput = {
+    marginRight: 5,   
+    marginBottom: 5
+}
+const styleTitulo = {
+    paddingTop: 10,
+    color: "#0d6efd"
+}
+const styleButton = {
+    marginRight: 5
+}
+
 
