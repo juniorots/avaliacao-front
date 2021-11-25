@@ -29,7 +29,8 @@ export default class MainCliente extends Component {
         };
     }
 
-    onChangeHandler(field, value) {
+    onChangeHandler(field, obj) {
+        var value = obj.target.value;
         this.setState({
             [field]: value
         });
@@ -125,7 +126,7 @@ export default class MainCliente extends Component {
                                 placeHolder="CPF"
                                 required
                                 value={cpf}
-                                onChange={value => this.onChangeHandler("nomeCliente", value)}
+                                onChange={value => this.onChangeHandler("cpf", value)}
                             />
                             
                             <div className="input-group mb-3">

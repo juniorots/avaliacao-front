@@ -27,9 +27,18 @@ export default class AddCliente extends Component {
             enviado: false            
         };
     }
-    onChangeHandler(field, value) {
+
+    onChangeHandler(obj) {
+        const { name, value } = obj.target;
+        if (name.includes("endereco")) {
+            const { endereco } = this.state;
+            const enderecoAtual = endereco;
+            enderecoAtual[name.substring(name.indexOf(".")+1,name.length)] = value;
+            this.setState({ endereco: enderecoAtual });
+            return;
+        }
         this.setState({
-            [field]: value
+            [name]: value
         });
     }
     
@@ -81,21 +90,21 @@ export default class AddCliente extends Component {
                             type="text"
                             className="form-control"
                             style={styleInput}
-                            id="nomeCliente"
+                            name="nomeCliente"
                             placeHolder="Nome"
                             required
                             value={nomeCliente}
-                            onChange={value => this.onChangeHandler("nomeCliente", value)}
+                            onChange={value => this.onChangeHandler(value)}
                         />
                         <input
                             type="text"
                             className="form-control"
                             style={styleMediumInput}
-                            id="cpf"
+                            name="cpf"
                             placeHolder="CPF"
                             required
                             value={cpf}
-                            onChange={value => this.onChangeHandler("nomeCliente", value)}
+                            onChange={value => this.onChangeHandler(value)}
                         />
                         
                         <div className="input-group mb-3">
@@ -103,11 +112,11 @@ export default class AddCliente extends Component {
                                 type="text"
                                 className="form-control"
                                 style={styleShortInput}
-                                id="telefone"
+                                name="telefone"
                                 placeHolder="TELEFONE"
                                 required
                                 value={telefone}
-                                onChange={value => this.onChangeHandler("telefone", value)}
+                                onChange={value => this.onChangeHandler(value)}
                             />
                             <div className="input-group-append">
                                 <button 
@@ -124,11 +133,11 @@ export default class AddCliente extends Component {
                                 type="text"
                                 className="form-control"
                                 style={styleMediumInput}
-                                id="email"
+                                name="email"
                                 placeHolder="E-MAIL"
                                 required
                                 value={email}
-                                onChange={value => this.onChangeHandler("email", value)}
+                                onChange={value => this.onChangeHandler(value)}
                             />   
                             <div className="input-group-append">
                                 <button 
@@ -145,60 +154,60 @@ export default class AddCliente extends Component {
                             type="text"
                             className="form-control"
                             style={styleShortInput}
-                            id="cep"
+                            name="endereco.cep"
                             placeHolder="CEP"
                             required
                             value={endereco.cep}
-                            onChange={value => this.onChangeHandler("endereco.cep", value)}
+                            onChange={value => this.onChangeHandler(value)}
                         />
                         <input
                             type="text"
                             className="form-control"
                             style={styleInput}
-                            id="logradouro"
+                            name="endereco.logradouro"
                             placeHolder="LOGRADOURO"
                             required
                             value={endereco.logradouro}
-                            onChange={value => this.onChangeHandler("endereco.logradouro", value)}
+                            onChange={value => this.onChangeHandler(value)}
                         />
                         <input
                             type="text"
                             className="form-control"
                             style={styleMediumInput}
-                            id="bairro"
+                            name="endereco.bairro"
                             placeHolder="BAIRRO"
                             required
                             value={endereco.bairro}
-                            onChange={value => this.onChangeHandler("endereco.bairro", value)}
+                            onChange={value => this.onChangeHandler(value)}
                         />
                         <input
                             type="text"
                             className="form-control"
                             style={styleMediumInput}
-                            id="cidade"
+                            name="endereco.cidade"
                             placeHolder="CIDADE"
                             required
                             value={endereco.cidade}
-                            onChange={value => this.onChangeHandler("endereco.cidade", value)}
+                            onChange={value => this.onChangeHandler(value)}
                         />
                         <input
                             type="text"
                             className="form-control"
                             style={styleShortInput}
-                            id="uf"
+                            name="endereco.uf"
                             placeHolder="UF"
                             required
                             value={endereco.uf}
-                            onChange={value => this.onChangeHandler("endereco.uf", value)}
+                            onChange={value => this.onChangeHandler(value)}
                         />
                         <input
                             type="text"
                             className="form-control"
                             style={styleInput}
-                            id="complemento"
+                            name="endereco.complemento"
                             placeHolder="COMPLEMENTO"                                
                             value={endereco.complemento}
-                            onChange={value => this.onChangeHandler("endereco.complemento", value)}
+                            onChange={value => this.onChangeHandler(value)}
                         />
 
                         <button onClick="{this.saveCliente}" className="btn btn-success">
