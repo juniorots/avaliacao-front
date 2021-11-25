@@ -1,12 +1,13 @@
 import React, { Component } from "react";
+import { StyleSheet } from "react-native";
 import Alert from "react-bootstrap/Alert";
 import ClienteService from "../services/avaliacao.service";
 
 export default class AddCliente extends Component {
     constructor(props) {
         super(props);
-        this.saveCliente = this.salvarCliente.bind(this);
-        this.newCliente = this.newCliente.bind(this);
+        // this.saveCliente = this.salvarCliente.bind(this);
+        // this.newCliente = this.newCliente.bind(this);
 
         this.state = {
             id: null,
@@ -60,23 +61,24 @@ export default class AddCliente extends Component {
                         </Alert.Link>
                     </Alert>
                 ) : (
-                    <div>
+                    <div style={styleContainer}>
                         <div className="form-group">                            
                             <input
                                 type="text"
                                 className="form-control"
+                                style={styleInput}
                                 id="nomeCliente"
                                 placeHolder="Nome..."
                                 required
-                                value={this.state.nome}
+                                value={this.state.nomeCliente}
                                 onChange={value => this.onChangeHandler("nomeCliente", value)}
                             />
                         </div>
-                        <div className="form-group">
-                            <label htmlFor="cpf">CPF</label>        
+                        <div className="form-group">                                
                             <input
                                 type="text"
                                 className="form-control"
+                                style={styleInput}
                                 id="cpf"
                                 placeHolder="CPF..."
                                 required
@@ -93,4 +95,14 @@ export default class AddCliente extends Component {
             </div>
         );
     }
+}
+
+const styleContainer = {
+    margin: 5
+}
+
+const styleInput = {
+    marginBottom: 5,
+    marginleft: 5,
+    MarginRight: 5
 }

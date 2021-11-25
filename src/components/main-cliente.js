@@ -8,7 +8,7 @@ export default class MainCliente extends Component {
         this.updateCliente = this.updateCliente.bind(this);
         this.deleteCliente = this.deleteCliente.bind(this);
 
-        this.sate = {
+        this.state = {
             cliente: null,
             idCliente: "",
             nomeCliente: "",

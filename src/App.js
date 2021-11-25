@@ -27,8 +27,8 @@ class App extends Component {
 
         <div className="container mt-3"> 
           <Routes>
-            <Route exact path="/clientes" component={MainCliente} />
-            <Route exact path="/add-clientes" component={AddCliente} />
+            <Route path="/clientes" element={<MainCliente/>} />
+            <Route path="/add-clientes" element={<AddCliente/>} />
           </Routes>
         </div>
       </div>    
