@@ -1,8 +1,8 @@
 import http from "../http-common";
 
 class ClienteService {
-    getCliente(id) {
-        return http.get("/clientes/{id}")
+    getCliente(nome) {
+        return http.get("/clientes/{nome}")
     }
 
     create(data){

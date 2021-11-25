@@ -1,5 +1,9 @@
-import React, { Component } from "react";
+// import React, { Component } from "react";
+import { Link, Routes, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css"
+
+import AddCliente from "./components/add-cliente";
+import MainCliente from "./components/main-cliente";
 
 function App() {
   return (
@@ -10,7 +14,7 @@ function App() {
         </a>
         <div className="navbar-nav mr-auto">
           <li className="nav-item">
-            <Link to={"\add-clientes"} className="nav-link">
+            <Link to={"/add-clientes"} className="nav-link">
               Adicionar
             </Link>
           </li>
@@ -18,10 +22,10 @@ function App() {
       </nav>
 
       <div className="container mt-3"> 
-        <Switch>
-          <Route exact path={["/", "/clientes"]} component={ClienteList} />
+        <Routes>
+          <Route exact path={["/", "/clientes"]} component={MainCliente} />
           <Route exact path="/add-clientes" component={AddCliente} />
-        </Switch>
+        </Routes>
       </div>
     </div>
   );
