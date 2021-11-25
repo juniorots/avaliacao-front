@@ -10,11 +10,22 @@ export default class AddCliente extends Component {
         // this.newCliente = this.newCliente.bind(this);
 
         this.state = {
-            id: null,
-            nomeCliente: "",
-            cpf: "",
-            enviado: false
-        }
+            cliente: {nome:"teste"},
+            idCliente: "",
+            nomeCliente: "",            
+            endereco: {
+                cep: "",
+                logradouro: "",
+                bairro: "",
+                cidade: "",
+                uf: "",
+                complemento: ""
+            },
+            telefone: [],
+            email: [],
+            operador: "",
+            enviado: false            
+        };
     }
     onChangeHandler(field, value) {
         this.setState({
@@ -51,6 +62,8 @@ export default class AddCliente extends Component {
     }
 
     render() {
+        const { nomeCliente,
+            cpf, endereco, telefone, email } = this.state;
         return (
             <div className="submit-form">
                 {this.state.enviado ? (
@@ -62,30 +75,111 @@ export default class AddCliente extends Component {
                     </Alert>
                 ) : (
                     <div style={styleContainer}>
-                        <div className="form-group">                            
-                            <input
-                                type="text"
-                                className="form-control"
-                                style={styleInput}
-                                id="nomeCliente"
-                                placeHolder="Nome..."
-                                required
-                                value={this.state.nomeCliente}
-                                onChange={value => this.onChangeHandler("nomeCliente", value)}
-                            />
-                        </div>
-                        <div className="form-group">                                
-                            <input
-                                type="text"
-                                className="form-control"
-                                style={styleInput}
-                                id="cpf"
-                                placeHolder="CPF..."
-                                required
-                                value={this.state.cpf}
-                                onChange={value => this.onChangeHandler("cpf", value)}
-                            />
-                        </div>
+                        <h3 style={styleTitulo}>Preencha os dados</h3>
+                        <input
+                            type="text"
+                            className="form-control"
+                            style={styleInput}
+                            id="nomeCliente"
+                            placeHolder="Nome"
+                            required
+                            size="20"
+                            value={nomeCliente}
+                            onChange={value => this.onChangeHandler("nomeCliente", value)}
+                        />
+                        <input
+                            type="text"
+                            className="form-control"
+                            style={styleInput}
+                            id="cpf"
+                            placeHolder="CPF"
+                            required
+                            value={cpf}
+                            onChange={value => this.onChangeHandler("nomeCliente", value)}
+                        />
+                        
+                        <input
+                            type="text"
+                            className="form-control"
+                            style={styleInput}
+                            id="telefone"
+                            placeHolder="TELEFONE"
+                            required
+                            value={telefone}
+                            onChange={value => this.onChangeHandler("telefone", value)}
+                        />
+
+                        <input
+                            type="text"
+                            className="form-control"
+                            style={styleInput}
+                            id="email"
+                            placeHolder="E-MAIL"
+                            required
+                            value={email}
+                            onChange={value => this.onChangeHandler("email", value)}
+                        />   
+
+                        <h5 style={styleTitulo}>Endereço</h5>
+                        <input
+                            type="text"
+                            className="form-control"
+                            style={styleInput}
+                            id="cep"
+                            placeHolder="CEP"
+                            required
+                            value={endereco.cep}
+                            onChange={value => this.onChangeHandler("endereco.cep", value)}
+                        />
+                        <input
+                            type="text"
+                            className="form-control"
+                            style={styleInput}
+                            id="logradouro"
+                            placeHolder="LOGRADOURO"
+                            required
+                            value={endereco.logradouro}
+                            onChange={value => this.onChangeHandler("endereco.logradouro", value)}
+                        />
+                        <input
+                            type="text"
+                            className="form-control"
+                            style={styleInput}
+                            id="bairro"
+                            placeHolder="BAIRRO"
+                            required
+                            value={endereco.bairro}
+                            onChange={value => this.onChangeHandler("endereco.bairro", value)}
+                        />
+                        <input
+                            type="text"
+                            className="form-control"
+                            style={styleInput}
+                            id="cidade"
+                            placeHolder="CIDADE"
+                            required
+                            value={endereco.cidade}
+                            onChange={value => this.onChangeHandler("endereco.cidade", value)}
+                        />
+                        <input
+                            type="text"
+                            className="form-control"
+                            style={styleInput}
+                            id="uf"
+                            placeHolder="UF"
+                            required
+                            value={endereco.uf}
+                            onChange={value => this.onChangeHandler("endereco.uf", value)}
+                        />
+                        <input
+                            type="text"
+                            className="form-control"
+                            style={styleInput}
+                            id="complemento"
+                            placeHolder="COMPLEMENTO"                                
+                            value={endereco.complemento}
+                            onChange={value => this.onChangeHandler("endereco.complemento", value)}
+                        />
 
                         <button onClick="{this.saveCliente}" className="btn btn-success">
                             Cadastrar
@@ -100,9 +194,12 @@ export default class AddCliente extends Component {
 const styleContainer = {
     margin: 5
 }
-
 const styleInput = {
     marginBottom: 5,
     marginleft: 5,
-    MarginRight: 5
+    marginRight: 5
+}
+const styleTitulo = {
+    paddingTop: 10,
+    color: "#0d6efd"
 }

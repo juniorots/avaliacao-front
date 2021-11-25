@@ -13,6 +13,16 @@ export default class MainCliente extends Component {
             idCliente: "",
             nomeCliente: "",
             nomePesquisa: "",
+            endereco: {
+                cep: "",
+                logradouro: "",
+                bairro: "",
+                cidade: "",
+                uf: "",
+                complemento: ""
+            },
+            telefone: [],
+            email: [],
             operador: "",
             found: true,
             searchEvent: false
@@ -69,7 +79,8 @@ export default class MainCliente extends Component {
     }
 
     render() {
-        const { nomeCliente, cliente, found, nomePesquisa, cpf, searchEvent } = this.state;
+        const { nomeCliente, cliente, found, 
+            nomePesquisa, cpf, searchEvent, endereco, telefone, email } = this.state;
         return(
             <div className="list_row">
                 <div className="col-md-10">
@@ -101,7 +112,7 @@ export default class MainCliente extends Component {
                                 className="form-control"
                                 style={styleInput}
                                 id="nomeCliente"
-                                placeHolder="Nome..."
+                                placeHolder="Nome"
                                 required
                                 value={nomeCliente}
                                 onChange={value => this.onChangeHandler("nomeCliente", value)}
@@ -111,11 +122,94 @@ export default class MainCliente extends Component {
                                 className="form-control"
                                 style={styleInput}
                                 id="cpf"
-                                placeHolder="CPF..."
+                                placeHolder="CPF"
                                 required
                                 value={cpf}
                                 onChange={value => this.onChangeHandler("nomeCliente", value)}
                             />
+                            
+                            <input
+                                type="text"
+                                className="form-control"
+                                style={styleInput}
+                                id="telefone"
+                                placeHolder="TELEFONE"
+                                required
+                                value={telefone}
+                                onChange={value => this.onChangeHandler("telefone", value)}
+                            />
+
+                            <input
+                                type="text"
+                                className="form-control"
+                                style={styleInput}
+                                id="email"
+                                placeHolder="E-MAIL"
+                                required
+                                value={email}
+                                onChange={value => this.onChangeHandler("email", value)}
+                            />   
+
+                            <h5 style={styleTitulo}>Endereço</h5>
+                            <input
+                                type="text"
+                                className="form-control"
+                                style={styleInput}
+                                id="cep"
+                                placeHolder="CEP"
+                                required
+                                value={endereco.cep}
+                                onChange={value => this.onChangeHandler("endereco.cep", value)}
+                            />
+                            <input
+                                type="text"
+                                className="form-control"
+                                style={styleInput}
+                                id="logradouro"
+                                placeHolder="LOGRADOURO"
+                                required
+                                value={endereco.logradouro}
+                                onChange={value => this.onChangeHandler("endereco.logradouro", value)}
+                            />
+                            <input
+                                type="text"
+                                className="form-control"
+                                style={styleInput}
+                                id="bairro"
+                                placeHolder="BAIRRO"
+                                required
+                                value={endereco.bairro}
+                                onChange={value => this.onChangeHandler("endereco.bairro", value)}
+                            />
+                            <input
+                                type="text"
+                                className="form-control"
+                                style={styleInput}
+                                id="cidade"
+                                placeHolder="CIDADE"
+                                required
+                                value={endereco.cidade}
+                                onChange={value => this.onChangeHandler("endereco.cidade", value)}
+                            />
+                            <input
+                                type="text"
+                                className="form-control"
+                                style={styleInput}
+                                id="uf"
+                                placeHolder="UF"
+                                required
+                                value={endereco.uf}
+                                onChange={value => this.onChangeHandler("endereco.uf", value)}
+                            />
+                            <input
+                                type="text"
+                                className="form-control"
+                                style={styleInput}
+                                id="complemento"
+                                placeHolder="COMPLEMENTO"                                
+                                value={endereco.complemento}
+                                onChange={value => this.onChangeHandler("endereco.complemento", value)}
+                            />                                       
 
                             <button
                                 className="btn btn-success" style={styleButton}
@@ -153,6 +247,7 @@ const styleTitulo = {
     color: "#0d6efd"
 }
 const styleButton = {
+    marginTop: 10,
     marginRight: 5
 }
 
