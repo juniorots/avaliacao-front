@@ -40,6 +40,8 @@ export default class MainCliente extends Component {
             this.setState({ endereco: enderecoAtual });
             return;
         }
+        if (name.includes("nomeCliente"))
+            value = value.replace(/[!@#¨$%^&*)(+=._-]+/g, "");
         this.setState({
             [name]: value
         });

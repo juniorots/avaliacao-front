@@ -30,9 +30,9 @@ export default class AddCliente extends Component {
             valor: ""          
         };
     }
-
+    
     onChangeHandler(obj) {
-        const { name, value } = obj.target;
+        let { name, value } = obj.target;
         if (name.includes("endereco")) {
             const { endereco } = this.state;
             const enderecoAtual = endereco;
@@ -40,6 +40,8 @@ export default class AddCliente extends Component {
             this.setState({ endereco: enderecoAtual });
             return;
         }
+        if (name.includes("nomeCliente"))
+            value = value.replace(/[!@#¨$%^&*)(+=._-]+/g, "");
         this.setState({
             [name]: value
         });
@@ -50,7 +52,7 @@ export default class AddCliente extends Component {
             nome: this.state.nomeCliente,
             cpf: this.state.cpf
         }
-
+        
         ClienteService.create(data).then(response => {
             this.setState({
                 id: response.data.id,
@@ -104,7 +106,7 @@ export default class AddCliente extends Component {
                         <input
                             type="text"
                             className="form-control"
-                            style={styleInput}
+                            style={styleInput}                                                        
                             name="nomeCliente"
                             placeHolder="Nome"
                             required
