@@ -74,14 +74,14 @@ export default class AddCliente extends Component {
     }
 
     shapePhone(obj) {
-        this.setState({ valor: "TESTE" });
-console.log(this.state.valor);
         const { value } = obj.target;
         const newValue = value.replace("-", "").replace("(","").replace(")","").replace(" ", "");
         if (newValue.length === 10) {
             const slice = 6;
             const tmp = `(${newValue.substring(0,2)}) ${newValue.substring(2, slice)}-${newValue.substring(slice, value.length)}`;
-            return tmp;
+            this.setState({ tmpTelefone: tmp }, () => {
+                obj.target.value = this.state.tmpTelefone;
+            });
         }
     }
 

@@ -22,6 +22,7 @@ export default class MainCliente extends Component {
                 uf: "",
                 complemento: ""
             },
+            tmpTelefone: "",
             telefone: [],
             email: [],
             operador: "",
@@ -64,7 +65,7 @@ export default class MainCliente extends Component {
     }
 
     updateCliente() {       
-        AvaliacaoService.update(this.state.cliente.id, this.state.cliente)
+        AvaliacaoService.update(this.state.cliente.idCliente, this.state.cliente)
             .then(response => {
                 this.setState({
                     cliente: response.data,
@@ -87,9 +88,21 @@ export default class MainCliente extends Component {
             })
     }
 
+    shapePhone(obj) {
+        const { value } = obj.target;
+        const newValue = value.replace("-", "").replace("(","").replace(")","").replace(" ", "");
+        if (newValue.length === 10) {
+            const slice = 6;
+            const tmp = `(${newValue.substring(0,2)}) ${newValue.substring(2, slice)}-${newValue.substring(slice, value.length)}`;
+            this.setState({ tmpTelefone: tmp }, () => {
+                obj.target.value = this.state.tmpTelefone;
+            });
+        }
+    }
+
     render() {
         const { nomeCliente, cliente, found, 
-            nomePesquisa, cpf, searchEvent, endereco, telefone, email } = this.state;
+            nomePesquisa, cpf, searchEvent, endereco, telefone, email, tmpTelefone } = this.state;
         return(
             <div className="list_row">
                 <div className="col-md-8">
@@ -140,14 +153,17 @@ export default class MainCliente extends Component {
                             />
                             
                             <div className="input-group mb-3 w-50">
-                                <input
+                                <InputMask
                                     type="text"
                                     className="form-control"
                                     style={styleShortInput}
-                                    name="telefone"
+                                    mask={tmpTelefone < 11 ? "(99) 9999-9999" : "(99) 99999-9999" }
+                                    maskChar=""
+                                    name="tmpTelefone"
                                     placeHolder="TELEFONE"
                                     required
-                                    value={telefone}                                    
+                                    value={tmpTelefone}
+                                    onBlur={value => this.shapePhone(value)}
                                     onChange={value => this.onChangeHandler(value)}
                                 />
                                 <div className="input-group-append">
