@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { Text } from "react-native";
 import Alert from "react-bootstrap/Alert";
 import ClienteService from "../services/avaliacao.service";
+import InputMask from "react-input-mask";
 
 export default class AddCliente extends Component {
     constructor(props) {
@@ -96,22 +96,25 @@ export default class AddCliente extends Component {
                             value={nomeCliente}
                             onChange={value => this.onChangeHandler(value)}
                         />
-                        <input
+                        <InputMask
                             type="text"
                             className="form-control"
-                            style={styleMediumInput}
+                            style={styleShortInput}
                             name="cpf"
+                            mask="999.999.999-99"
                             placeHolder="CPF"
                             required
                             value={cpf}
                             onChange={value => this.onChangeHandler(value)}
                         />
                         
-                        <div className="input-group mb-3">
-                            <input
+                        <div className="input-group mb-3 w-50">
+                            <InputMask
                                 type="text"
                                 className="form-control"
                                 style={styleShortInput}
+                                mask={telefone < 11 ? "(99) 9999-9999" : "(99) 99999-9999" }
+                                maskChar=""
                                 name="telefone"
                                 placeHolder="TELEFONE"
                                 required
@@ -150,10 +153,11 @@ export default class AddCliente extends Component {
                         </div>   
 
                         <h5 style={styleTitulo}>Endereço</h5>
-                        <input
+                        <InputMask
                             type="text"
                             className="form-control"
                             style={styleShortInput}
+                            mask="99.999-999"
                             name="endereco.cep"
                             placeHolder="CEP"
                             required

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import AvaliacaoService from "../services/avaliacao.service";
+import InputMask from "react-input-mask";
 
 export default class MainCliente extends Component {
     constructor(props) {
@@ -125,18 +126,19 @@ export default class MainCliente extends Component {
                                 value={nomeCliente}
                                 onChange={value => this.onChangeHandler(value)}
                             />
-                            <input
+                            <InputMask
                                 type="text"
                                 className="form-control"
-                                style={styleMediumInput}
+                                style={styleShortInput}
                                 name="cpf"
+                                mask="999.999.999-99"
                                 placeHolder="CPF"
                                 required
                                 value={cpf}
                                 onChange={value => this.onChangeHandler(value)}
                             />
                             
-                            <div className="input-group mb-3">
+                            <div className="input-group mb-3 w-50">
                                 <input
                                     type="text"
                                     className="form-control"
@@ -154,10 +156,10 @@ export default class MainCliente extends Component {
                                         onClick="{this.addTelefone}">
                                             Adicionar
                                     </button>
-                                    </div>
+                                </div>
                             </div>
 
-                            <div className="input-group mb-3">
+                            <div className="input-group mb-1">
                                 <input
                                     type="text"
                                     className="form-control"
@@ -179,10 +181,11 @@ export default class MainCliente extends Component {
                             </div>   
 
                             <h5 style={styleTitulo}>Endereço</h5>
-                            <input
+                            <InputMask
                                 type="text"
                                 className="form-control"
                                 style={styleShortInput}
+                                mask="99.999-999"
                                 name="endereco.cep"
                                 placeHolder="CEP"
                                 required
@@ -291,5 +294,6 @@ const styleButton = {
     marginTop: 10,
     marginRight: 5
 }
+
 
 
