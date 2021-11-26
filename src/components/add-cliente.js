@@ -12,7 +12,8 @@ export default class AddCliente extends Component {
         this.state = {
             cliente: {nome:"teste"},
             idCliente: "",
-            nomeCliente: "",            
+            nomeCliente: "", 
+            cpf: "",           
             endereco: {
                 cep: "",
                 logradouro: "",
@@ -21,10 +22,12 @@ export default class AddCliente extends Component {
                 uf: "",
                 complemento: ""
             },
+            tmpTelefone: "",
             telefone: [],
             email: [],
             operador: "",
-            enviado: false            
+            enviado: false,
+            valor: ""          
         };
     }
 
@@ -70,9 +73,21 @@ export default class AddCliente extends Component {
         });
     }
 
+    shapePhone(obj) {
+        this.setState({ valor: "TESTE" });
+console.log(this.state.valor);
+        const { value } = obj.target;
+        const newValue = value.replace("-", "").replace("(","").replace(")","").replace(" ", "");
+        if (newValue.length === 10) {
+            const slice = 6;
+            const tmp = `(${newValue.substring(0,2)}) ${newValue.substring(2, slice)}-${newValue.substring(slice, value.length)}`;
+            return tmp;
+        }
+    }
+
     render() {
         const { nomeCliente,
-            cpf, endereco, telefone, email } = this.state;
+            cpf, endereco, telefone, email, tmpTelefone } = this.state;
         return (
             <div className="submit-form">
                 {this.state.enviado ? (
@@ -102,6 +117,7 @@ export default class AddCliente extends Component {
                             style={styleShortInput}
                             name="cpf"
                             mask="999.999.999-99"
+                            maskChar=""
                             placeHolder="CPF"
                             required
                             value={cpf}
@@ -113,12 +129,13 @@ export default class AddCliente extends Component {
                                 type="text"
                                 className="form-control"
                                 style={styleShortInput}
-                                mask={telefone < 11 ? "(99) 9999-9999" : "(99) 99999-9999" }
+                                mask={tmpTelefone < 11 ? "(99) 9999-9999" : "(99) 99999-9999" }
                                 maskChar=""
-                                name="telefone"
+                                name="tmpTelefone"
                                 placeHolder="TELEFONE"
                                 required
-                                value={telefone}
+                                value={tmpTelefone}
+                                onBlur={value => this.shapePhone(value)}
                                 onChange={value => this.onChangeHandler(value)}
                             />
                             <div className="input-group-append">
@@ -158,6 +175,7 @@ export default class AddCliente extends Component {
                             className="form-control"
                             style={styleShortInput}
                             mask="99.999-999"
+                            maskChar=""
                             name="endereco.cep"
                             placeHolder="CEP"
                             required

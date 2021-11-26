@@ -132,6 +132,7 @@ export default class MainCliente extends Component {
                                 style={styleShortInput}
                                 name="cpf"
                                 mask="999.999.999-99"
+                                maskChar=""
                                 placeHolder="CPF"
                                 required
                                 value={cpf}
@@ -146,7 +147,7 @@ export default class MainCliente extends Component {
                                     name="telefone"
                                     placeHolder="TELEFONE"
                                     required
-                                    value={telefone}
+                                    value={telefone}                                    
                                     onChange={value => this.onChangeHandler(value)}
                                 />
                                 <div className="input-group-append">
@@ -186,6 +187,7 @@ export default class MainCliente extends Component {
                                 className="form-control"
                                 style={styleShortInput}
                                 mask="99.999-999"
+                                maskChar=""
                                 name="endereco.cep"
                                 placeHolder="CEP"
                                 required
