@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import AvaliacaoService from "../services/avaliacao.service";
 import InputMask from "react-input-mask";
+import Select from 'react-select'
 
 export default class MainCliente extends Component {
     constructor(props) {
@@ -23,12 +24,27 @@ export default class MainCliente extends Component {
                 complemento: ""
             },
             tmpTelefone: "",
-            telefone: [],
-            email: [],
+            telefone: [
+                {
+                    tipo: "",
+                    numero: ""
+                }
+            ],
+            tmpEmail: "",
+            email: [
+                {
+                    endereco: ""
+                }
+            ],
+            tipoTelefone: [
+                { value : "residencial", label: "Residencial" },
+                { value : "comercial", label: "Comercial" },
+                { value : "celular", label: "Celular" }
+            ],
             operador: "",
             found: true,
             searchEvent: false
-        };
+        };        
     }
 
     onChangeHandler(obj) {
@@ -66,7 +82,8 @@ export default class MainCliente extends Component {
             })
     }
 
-    updateCliente() {       
+    updateCliente() {     
+        if (!this.validator()) return;  
         AvaliacaoService.update(this.state.cliente.id, this.state.cliente)
             .then(response => {
                 this.setState({
@@ -126,8 +143,15 @@ export default class MainCliente extends Component {
         e.style.display = "none";
     }
 
+    validator() {
+        let e = document.getElementByName("nomeCliente");
+        if (value.length > 0 && value.length < 4) return false;
+
+        return true;
+    }
+
     render() {
-        const { nomeCliente, cliente, found, 
+        const { nomeCliente, cliente, found, tipoTelefone, tmpEmail,
             nomePesquisa, cpf, searchEvent, endereco, telefone, email, tmpTelefone } = this.state;
         return(
             <div className="list_row">
@@ -182,8 +206,9 @@ export default class MainCliente extends Component {
                                 value={cpf}
                                 onChange={value => this.onChangeHandler(value)}
                             />
-                            
-                            <div className="input-group mb-3 w-50">
+                                                        
+                            <div className="input-group mb-3 w-40">
+                                <Select options={tipoTelefone}/>
                                 <InputMask
                                     type="text"
                                     className="form-control"
@@ -215,10 +240,10 @@ export default class MainCliente extends Component {
                                     type="text"
                                     className="form-control"
                                     style={styleMediumInput}
-                                    name="email"
+                                    name="tmpEmail"
                                     placeHolder="E-MAIL"
                                     required
-                                    value={email}
+                                    value={tmpEmail}
                                     onBlur={value => this.checkEmail(value)}
                                     onChange={value => this.onChangeHandler(value)}
                                 />   

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Alert from "react-bootstrap/Alert";
 import ClienteService from "../services/avaliacao.service";
 import InputMask from "react-input-mask";
+import Select from 'react-select'
 
 export default class AddCliente extends Component {
     constructor(props) {
@@ -10,10 +11,10 @@ export default class AddCliente extends Component {
         // this.newCliente = this.newCliente.bind(this);
 
         this.state = {
-            cliente: {nome:"teste"},
+            cliente: {id: "", nome:"teste"},
             idCliente: "",
-            nomeCliente: "", 
-            cpf: "",           
+            nomeCliente: "",
+            nomePesquisa: "",
             endereco: {
                 cep: "",
                 logradouro: "",
@@ -23,12 +24,28 @@ export default class AddCliente extends Component {
                 complemento: ""
             },
             tmpTelefone: "",
-            telefone: [],
-            email: [],
+            telefone: [
+                {
+                    tipo: "",
+                    numero: ""
+                }
+            ],
+            tmpEmail: "",
+            email: [
+                {
+                    endereco: ""
+                }
+            ],
+            tipoTelefone: [
+                { value : "residencial", label: "Residencial" },
+                { value : "comercial", label: "Comercial" },
+                { value : "celular", label: "Celular" }
+            ],
             operador: "",
-            enviado: false,
-            valor: ""          
-        };
+            found: true,
+            searchEvent: false,
+            enviado: false
+        };        
     }
     
     onChangeHandler(obj) {
@@ -39,7 +56,7 @@ export default class AddCliente extends Component {
             enderecoAtual[name.substring(name.indexOf(".")+1,name.length)] = value;
             this.setState({ endereco: enderecoAtual });
             return;
-        }
+        }        
         if (name.includes("nomeCliente"))
             value = value.replace(/[!@#¨$%^&*)(+=._-]+/g, "");
         this.setState({
@@ -48,6 +65,7 @@ export default class AddCliente extends Component {
     }
     
     saveCliente() {
+        if (!this.validator()) return;
         var data = {
             nome: this.state.nomeCliente,
             cpf: this.state.cpf
@@ -111,8 +129,15 @@ export default class AddCliente extends Component {
         e.style.display = "none";
     }
 
+    validator() {
+        let e = document.getElementByName("nomeCliente");
+        if (value.length > 0 && value.length < 4) return false;
+
+        return true;
+    }
+
     render() {
-        const { nomeCliente,
+        const { nomeCliente, tipoTelefone, tmpEmail,
             cpf, endereco, telefone, email, tmpTelefone } = this.state;
         return (
             <div className="submit-form">
@@ -153,7 +178,8 @@ export default class AddCliente extends Component {
                             onChange={value => this.onChangeHandler(value)}
                         />
                         
-                        <div className="input-group mb-3 w-50">
+                        <div className="input-group mb-3 w-40">
+                            <Select options={tipoTelefone} />
                             <InputMask
                                 type="text"
                                 className="form-control"
@@ -185,10 +211,10 @@ export default class AddCliente extends Component {
                                 type="text"
                                 className="form-control"
                                 style={styleMediumInput}
-                                name="email"
+                                name="tmpEmail"
                                 placeHolder="E-MAIL"
                                 required
-                                value={email}
+                                value={tmpEmail}
                                 onBlur={value => this.checkEmail(value)}
                                 onChange={value => this.onChangeHandler(value)}
                             />   
@@ -305,4 +331,5 @@ const styleWarning = {
     color: "orange", 
     display: "none"   
 }
+
 
