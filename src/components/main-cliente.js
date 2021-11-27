@@ -10,7 +10,7 @@ export default class MainCliente extends Component {
         this.deleteCliente = this.deleteCliente.bind(this);
 
         this.state = {
-            cliente: {nome:"teste"},
+            cliente: {id: "", nome:"teste"},
             idCliente: "",
             nomeCliente: "",
             nomePesquisa: "",
@@ -32,7 +32,7 @@ export default class MainCliente extends Component {
     }
 
     onChangeHandler(obj) {
-        const { name, value } = obj.target;
+        let { name, value } = obj.target;
         if (name.includes("endereco")) {
             const { endereco } = this.state;
             const enderecoAtual = endereco;
@@ -67,7 +67,7 @@ export default class MainCliente extends Component {
     }
 
     updateCliente() {       
-        AvaliacaoService.update(this.state.cliente.idCliente, this.state.cliente)
+        AvaliacaoService.update(this.state.cliente.id, this.state.cliente)
             .then(response => {
                 this.setState({
                     cliente: response.data,
@@ -91,8 +91,8 @@ export default class MainCliente extends Component {
     }
 
     shapePhone(obj) {
-        const { value } = obj.target;
-        const newValue = value.replace("-", "").replace("(","").replace(")","").replace(" ", "");
+        let { value } = obj.target;
+        let newValue = value.replace("-", "").replace("(","").replace(")","").replace(" ", "");
         if (newValue.length === 10) {
             const slice = 6;
             const tmp = `(${newValue.substring(0,2)}) ${newValue.substring(2, slice)}-${newValue.substring(slice, value.length)}`;
@@ -100,6 +100,30 @@ export default class MainCliente extends Component {
                 obj.target.value = this.state.tmpTelefone;
             });
         }
+    }
+
+    checkMinLength(obj) {
+        let { value } = obj.target;
+        let e = document.getElementById("lblWarning");
+        if (value.length > 0 && value.length < 4) {
+            e.tabIndex="0";
+            e.focus();
+            e.style.display = "block";
+            return;
+        }
+        e.style.display = "none";
+    }
+
+    checkEmail(obj) {
+        let { value } = obj.target;
+        let e = document.getElementById("warningEmail");
+        if (!value.includes("@") && value.length > 0) {
+            e.tabIndex="0";
+            e.focus();
+            e.style.display = "block";
+            return;
+        }
+        e.style.display = "none";
     }
 
     render() {
@@ -131,6 +155,9 @@ export default class MainCliente extends Component {
                     {cliente ? (
                         <div className="edit-form">
                             <h3 style={styleTitulo}>Informações do Cliente</h3>
+                            <h8 style={styleWarning} id="lblWarning">
+                                Aviso: Informe de 3 a 100 caracteres para o NOME
+                            </h8>
                             <input
                                 type="text"
                                 className="form-control"
@@ -138,7 +165,9 @@ export default class MainCliente extends Component {
                                 name="nomeCliente"
                                 placeHolder="Nome"
                                 required
+                                maxLength="100"                                
                                 value={nomeCliente}
+                                onBlur={value => this.checkMinLength(value)}
                                 onChange={value => this.onChangeHandler(value)}
                             />
                             <InputMask
@@ -178,6 +207,9 @@ export default class MainCliente extends Component {
                                 </div>
                             </div>
 
+                            <h8 style={styleWarning} id="warningEmail">
+                                E-mail inválido.
+                            </h8>
                             <div className="input-group mb-1">
                                 <input
                                     type="text"
@@ -187,6 +219,7 @@ export default class MainCliente extends Component {
                                     placeHolder="E-MAIL"
                                     required
                                     value={email}
+                                    onBlur={value => this.checkEmail(value)}
                                     onChange={value => this.onChangeHandler(value)}
                                 />   
                                 <div className="input-group-append">
@@ -313,6 +346,10 @@ const styleTitulo = {
 const styleButton = {
     marginTop: 10,
     marginRight: 5
+}
+const styleWarning = {
+    color: "orange", 
+    display: "none"   
 }
 
 
