@@ -19,7 +19,7 @@ const TableEmail = props => {
             { items.map((email, index) => {
                 return (
                     <tr key={index} style={styleLine}>
-                        <td>{email.endereco}</td>  
+                        <td>{email.email}</td>  
                         
                         {/* <td><button style={styleButton} 
                                 onClick={()=>removerItem(email.endereco)}>excluir

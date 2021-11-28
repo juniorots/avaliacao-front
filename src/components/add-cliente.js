@@ -28,18 +28,18 @@ export default class AddCliente extends Component {
             },
             tmpTelefone: "",
             tmpTpPhone: "",
-            telefone: [],
             tmpEmail: "",
+            telefone: [],
             email: [],
             tipoTelefone: [
                 { value : "residencial", label: "Residencial" },
                 { value : "comercial", label: "Comercial" },
                 { value : "celular", label: "Celular" }
             ],
-            operador: "OPERADOR 01",
+            auditoria: { operador: "OPERADOR 01" },
             found: true,
             searchEvent: false,
-            enviado: false
+            enviado: true
         };        
     }
     
@@ -65,17 +65,19 @@ export default class AddCliente extends Component {
             nome: this.state.nomeCliente,
             cpf: this.state.cpf,
             endereco: this.state.endereco,
-            telefone: this.state.telefone,
-            email: this.state.email,
-            operador: this.state.operador
+            telefones: this.state.telefone,
+            emails: this.state.email,
+            auditoria: this.state.auditoria
         }
-console.log(data); return;
 
         ClienteService.create(data).then(response => {
             this.setState({
-                id: response.data.id,
+                idCliente: response.data.id,
                 nomeCliente: response.data.nome,
                 cpf: response.data.cpf,
+                endereco: response.data.endereco,
+                telefone: response.data.telefones,
+                email: response.data.emails,
                 enviado: true
             });
             console.log(response.data);
@@ -132,7 +134,7 @@ console.log(data); return;
 
     validator = () => {
         let e = document.getElementById("nomeCliente");
-        if (e.value.length > 0 && e.value.length < 4) return false;
+        if (e.value.length > 0 && e.value.length < 4) return false; // :..-(
 
         if (this.state.telefone.length === 0) {
             alert("INSIRA PELO MENOS 1 TELEFONE");
@@ -160,6 +162,7 @@ console.log(data); return;
             }
             this.setState({
                 endereco: {
+                    cep: value,
                     uf: data.uf,
                     cidade: data.localidade,
                     bairro: data.bairro,
@@ -182,7 +185,7 @@ console.log(data); return;
     addEmail = () => {
         let e = document.getElementById("tmpEmail");        
         let list = this.state.email;        
-        list.push({endereco: e.value });
+        list.push({email: e.value });
         this.setState({
             email: list
         })
@@ -195,8 +198,8 @@ console.log(data); return;
             <div className="submit-form">
                 {this.state.enviado ? (
                     <Alert key={"1"} variant={"primary"}>
-                        Cliente Cadastrado. 
-                        <Alert.Link href="{this.newCliente}">
+                        Cliente Cadastrado.&nbsp; 
+                        <Alert.Link href={this.newCliente}>
                             Novo Cliente
                         </Alert.Link>
                     </Alert>

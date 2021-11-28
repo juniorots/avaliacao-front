@@ -27,15 +27,15 @@ export default class MainCliente extends Component {
             },
             tmpTelefone: "",
             tmpTpPhone: "",
-            telefone: [],
             tmpEmail: "",
+            telefone: [],
             email: [],
             tipoTelefone: [
                 { value : "residencial", label: "Residencial" },
                 { value : "comercial", label: "Comercial" },
                 { value : "celular", label: "Celular" }
             ],
-            operador: "",
+            auditoria: { operador: "OPERADOR 01" },
             found: true,
             searchEvent: false
         };        
@@ -77,7 +77,7 @@ export default class MainCliente extends Component {
     }
 
     updateCliente() {     
-        if (!this.validator()) return;  
+        if (!this.validator()) return;  // :..-(
         AvaliacaoService.update(this.state.cliente.id, this.state.cliente)
             .then(response => {
                 this.setState({
@@ -139,7 +139,7 @@ export default class MainCliente extends Component {
 
     validator() {
         let e = document.getElementById("nomeCliente");
-        if (e.value.length > 0 && e.value.length < 4) return false;
+        if (e.value.length > 0 && e.value.length < 4) return false; // :..-(
 
         if (this.state.telefone.length === 0) {
             alert("INSIRA PELO MENOS 1 TELEFONE");
@@ -167,6 +167,7 @@ export default class MainCliente extends Component {
             }
             this.setState({
                 endereco: {
+                    cep: value,
                     uf: data.uf,
                     cidade: data.localidade,
                     bairro: data.bairro,
@@ -189,7 +190,7 @@ export default class MainCliente extends Component {
     addEmail = () => {
         let e = document.getElementById("tmpEmail");        
         let list = this.state.email;        
-        list.push({endereco: e.value });
+        list.push({email: e.value });
         this.setState({
             email: list
         })
