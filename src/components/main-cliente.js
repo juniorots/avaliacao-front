@@ -13,10 +13,9 @@ export default class MainCliente extends Component {
         this.deleteCliente = this.deleteCliente.bind(this);
 
         this.state = {
-            cliente: "",
             idCliente: "",
             cpf: "",
-            nomeCliente: "",
+            nome: "",
             nomePesquisa: "",
             endereco: {
                 cep: "",
@@ -52,7 +51,7 @@ export default class MainCliente extends Component {
             this.setState({ endereco: enderecoAtual });
             return;
         }
-        if (name.includes("nomeCliente"))
+        if (name.includes("nome"))
             value = value.replace(/[!@#¨$%^&*)(+=._-]+/g, "");
         this.setState({
             [name]: value
@@ -64,7 +63,7 @@ export default class MainCliente extends Component {
             .then(response => {
                 this.setState({
                     idCliente: response.data.id,
-                    nomeCliente: response.data.nome,
+                    nome: response.data.nome,
                     cpf: response.data.cpf,
                     endereco: {
                         cep: response.data.endereco.cep,
@@ -82,7 +81,7 @@ export default class MainCliente extends Component {
                     found: true,
                     fullForm: true
                 });
-                console.log(response.data);
+                // console.log(response.data);
             }).catch(e => {
                 this.setState({ found: false })
                 console.log(e) // :..-(
@@ -92,7 +91,6 @@ export default class MainCliente extends Component {
 
     updateCliente() {     
         if (!this.validator()) return;  // :..-(
-
         AvaliacaoService.update(this.state.idCliente, this.state)
             .then(response => {
                 alert("CLIENTE ATUALIZADO");
@@ -103,7 +101,7 @@ export default class MainCliente extends Component {
     }
 
     deleteCliente() {       
-        AvaliacaoService.delete(this.state.cliente.id)
+        AvaliacaoService.delete(this.state.idCliente)
             .then(response => {
                 alert("EXCLUÍDO COM SUCESSO.");
                 this.setState({ found: false });                
@@ -154,7 +152,7 @@ export default class MainCliente extends Component {
     }
 
     validator() {
-        let e = document.getElementById("nomeCliente");
+        let e = document.getElementById("nome");
         if (e.value.length > 0 && e.value.length < 4) return false; // :..-(
 
         if (this.state.telefones.length === 0) {
@@ -219,7 +217,7 @@ export default class MainCliente extends Component {
         let { name, value } = obj.target;
         let e = document.getElementById("error"+name);
         let fields = [
-            "nomeCliente",
+            "nome",
             "cpf",
             // "tmpTelefone",
             // "tmpEmail",
@@ -243,7 +241,7 @@ export default class MainCliente extends Component {
 
 
     render() {
-        const { nomeCliente, found, tipoTelefone, tmpEmail,
+        const { nome, found, tipoTelefone, tmpEmail,
             nomePesquisa, cpf, searchEvent, endereco, telefones, emails, tmpTelefone } = this.state;
 
         return(
@@ -276,16 +274,16 @@ export default class MainCliente extends Component {
                             <h8 style={styleWarning} id="lblWarning">
                                 Aviso: Informe de 3 a 100 caracteres para o NOME
                             </h8>
-                            <div id="errornomeCliente" style={styleError}></div>
+                            <div id="errornome" style={styleError}></div>
                             <input
                                 type="text"
                                 className="form-control"
                                 style={styleInput}
-                                name="nomeCliente"
-                                id="nomeCliente"
+                                name="nome"
+                                id="nome"
                                 placeHolder="Nome"
                                 maxLength="100"                                
-                                value={nomeCliente}
+                                value={nome}
                                 onBlur={value => this.checkMinLength(value)}
                                 onChange={value => this.onChangeHandler(value)}
                             />
