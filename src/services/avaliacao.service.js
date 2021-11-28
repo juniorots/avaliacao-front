@@ -16,6 +16,9 @@ class ClienteService {
     delete(id) {
         return http.delete(`/clientes/${id}`);
     }
+    validarUsuario(login, senha) {
+        return http.get(`/clientes/${login}/${senha}`)
+    }
 }
 
 export default new ClienteService();

@@ -432,14 +432,14 @@ export default class MainCliente extends Component {
                             <button
                                 className="btn btn-success" style={styleButton}
                                 onClick={this.updateCliente} 
-                                disabled={found === false || !this.state.fullForm}>
+                                disabled={!this.state.fullForm}>
                                 Atualizar
                             </button>
 
                             <button
                                 className="btn btn-warning" style={styleButton}
                                 onClick={this.deleteCliente} 
-                                disabled={found === false || !this.state.fullForm}>
+                                disabled={!this.state.fullForm}>
                                 Apagar
                             </button>
                         </div>
