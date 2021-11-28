@@ -13,8 +13,9 @@ export default class MainCliente extends Component {
         this.deleteCliente = this.deleteCliente.bind(this);
 
         this.state = {
-            cliente: {id: "", nome:"teste"},
+            cliente: "",
             idCliente: "",
+            cpf: "",
             nomeCliente: "",
             nomePesquisa: "",
             endereco: {
@@ -36,7 +37,7 @@ export default class MainCliente extends Component {
                 { value : "celular", label: "Celular" }
             ],
             auditoria: { operador: "OPERADOR 01" },
-            found: true,
+            found: false,
             searchEvent: false,
             fullForm: false
         };        
@@ -58,28 +59,39 @@ export default class MainCliente extends Component {
         });
     }
 
-    searchCliente() {
+    searchCliente = () => {
         AvaliacaoService.getCliente(this.state.nomePesquisa)
             .then(response => {
                 this.setState({
-                    cliente: response.data,
+                    idCliente: response.data.id,
+                    nomeCliente: response.data.nome,
+                    cpf: response.data.cpf,
+                    endereco: {
+                        cep: response.data.endereco.cep,
+                        logradouro: response.data.endereco.logradouro,
+                        bairro: response.data.endereco.bairro,
+                        cidade: response.data.endereco.cidade,
+                        uf: response.data.endereco.uf,
+                        complemento: response.data.endereco.complemento
+                    },
+                    auditoria: {
+                        operador: response.data.auditoria.operador
+                    },
+                    telefone: response.data.telefones,
+                    email: response.data.emails,
                     found: true
                 });
                 console.log(response.data);
             }).catch(e => {
-                this.setState({
-                    found: false
-                })
+                this.setState({ found: false })
                 console.log(e) // :..-(
             })
-            this.setState({
-                searchEvent: true
-            })
+            this.setState({ searchEvent: true })
     }
 
     updateCliente() {     
         if (!this.validator()) return;  // :..-(
-        AvaliacaoService.update(this.state.cliente.id, this.state.cliente)
+        AvaliacaoService.update(this.state.idCliente, this.state.cliente)
             .then(response => {
                 this.setState({
                     cliente: response.data,
@@ -112,7 +124,7 @@ export default class MainCliente extends Component {
                 obj.target.value = this.state.tmpTelefone;
             });
         }
-        this.checkBlank(obj);
+        // this.checkBlank(obj);
     }
 
     checkMinLength(obj) {
@@ -132,7 +144,7 @@ export default class MainCliente extends Component {
     checkEmail(obj) {
         let { value } = obj.target;
         let e = document.getElementById("warningEmail");
-        this.checkBlank(obj);
+        // this.checkBlank(obj);
         
         if (value !== undefined && !value.includes("@") && value.length > 0) {
             // e.tabIndex="0";
@@ -162,10 +174,10 @@ export default class MainCliente extends Component {
 
     getCep(obj) {
         let { value } = obj.target;
-        if ( value.length === 0) return;
-        
-        value = value.replace("-","").replace(".","");
         this.checkBlank(obj);
+        if ( value.length === 0) return;
+
+        value = value.replace("-","").replace(".","");
 
         fetch(`https://viacep.com.br/ws/${value}/json/`)
         .then((resp) => resp.json())
@@ -208,16 +220,32 @@ export default class MainCliente extends Component {
     checkBlank = (obj) => {
         let { name, value } = obj.target;
         let e = document.getElementById("error"+name);
-        this.setState({ fullForm: true });
+        let fields = [
+            "nomeCliente",
+            "cpf",
+            // "tmpTelefone",
+            // "tmpEmail",
+            "endereco.cep",
+            "endereco.logradouro",
+            "endereco.bairro",
+            "endereco.cidade",
+            "endereco.uf"
+        ]
         e.innerHTML = "";
-        if (value.length === 0) {
+
+        if (value.length === 0) 
             e.innerHTML = "* Obrigatório";     
-            this.setState({ fullForm: false });
-        } 
+        
+        this.setState({ fullForm: true });
+        fields.map((field) => {
+            if (document.getElementById(field).value === "") 
+                this.setState({ fullForm: false }); 
+        });
     }
 
+
     render() {
-        const { nomeCliente, cliente, found, tipoTelefone, tmpEmail,
+        const { nomeCliente, found, tipoTelefone, tmpEmail,
             nomePesquisa, cpf, searchEvent, endereco, telefone, email, tmpTelefone } = this.state;
 
         return(
@@ -228,9 +256,10 @@ export default class MainCliente extends Component {
                             type="text"
                             className="form-control"
                             style={styleInput}
-                            placeHolder="Digite o nome..."                        
+                            placeHolder="Digite o nome..." 
+                            name="nomePesquisa"
                             value={nomePesquisa}
-                            onChange={value => this.onChangeHandler("nomePesquisa", value)}
+                            onChange={value => this.onChangeHandler(value)}
                         />
                         <div className="input-group-append">
                             <button 
@@ -243,7 +272,7 @@ export default class MainCliente extends Component {
                     </div>
                 </div>
                 <div className="col-md-8">
-                    {cliente ? (
+                    {found ? (
                         <div className="edit-form">
                             <h3 style={styleTitulo}>Informações do Cliente</h3>
                             <h8 style={styleWarning} id="lblWarning">
@@ -406,13 +435,15 @@ export default class MainCliente extends Component {
 
                             <button
                                 className="btn btn-success" style={styleButton}
-                                onClick={this.updateCliente} disabled={found === false}>
+                                onClick={this.updateCliente} 
+                                disabled={found === false || !this.state.fullForm}>
                                 Atualizar
                             </button>
 
                             <button
                                 className="btn btn-warning" style={styleButton}
-                                onClick={this.deleteCliente} disabled={found === false}>
+                                onClick={this.deleteCliente} 
+                                disabled={found === false || !this.state.fullForm}>
                                 Apagar
                             </button>
                         </div>
@@ -465,6 +496,10 @@ const styleError = {
     fontSize:13,
     marginBottom: 2
 }
-
+const styleMessage = {
+    addingTop: 10,
+    color: "#0d6efd",
+    fontSize:20,    
+}
 
 

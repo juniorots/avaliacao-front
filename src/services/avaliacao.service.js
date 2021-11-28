@@ -2,7 +2,7 @@ import http from "../http-common";
 
 class ClienteService {
     getCliente(nome) {
-        return http.get("/clientes/{nome}")
+        return http.get(`/clientes/${nome}`)
     }
 
     create(data){
@@ -10,11 +10,11 @@ class ClienteService {
     }
 
     update(id, data) {
-        return http.put("/clientes/{id}", data);
+        return http.put(`/clientes/${id}`, data);
     }
 
     delete(id) {
-        return http.delete("/clientes/{id}");
+        return http.delete(`/clientes/${id}`);
     }
 }
 

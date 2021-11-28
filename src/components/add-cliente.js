@@ -159,10 +159,10 @@ export default class AddCliente extends Component {
 
     getCep(obj) {
         let { value } = obj.target;
+        this.checkBlank(obj);
         if ( value.length === 0) return;
 
         value = value.replace("-","").replace(".","");
-        this.checkBlank(obj);
 
         fetch(`https://viacep.com.br/ws/${value}/json/`)
         .then((resp) => resp.json())
