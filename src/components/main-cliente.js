@@ -152,9 +152,33 @@ export default class MainCliente extends Component {
         return true;
     }
 
+    getCep(obj) {
+        let { value } = obj.target;
+        value = value.replace("-","").replace(".","");
+
+        fetch(`https://viacep.com.br/ws/${value}/json/`)
+        .then((resp) => resp.json())
+        .then((data) => {            
+            if (data.hasOwnProperty("erro")) {                
+                alert('PROBLEMAS COM O SERVIDOR, TENTE MAIS TARDE.');
+                return;
+            }
+            this.setState({
+                endereco: {
+                    uf: data.uf,
+                    cidade: data.cidade,
+                    bairro: data.bairro,
+                    logradouro: data.logradouro
+                }
+            })
+        })
+        .catch(erro => console.log(erro));
+    }
+
     render() {
         const { nomeCliente, cliente, found, tipoTelefone, tmpEmail,
             nomePesquisa, cpf, searchEvent, endereco, telefone, email, tmpTelefone } = this.state;
+
         return(
             <div className="list_row">
                 <div className="col-md-8">
@@ -272,6 +296,7 @@ export default class MainCliente extends Component {
                                 placeHolder="CEP"
                                 required
                                 value={endereco.cep}
+                                onBlur={value => this.getCep(value)}
                                 onChange={value => this.onChangeHandler(value)}
                             />
                             <input
