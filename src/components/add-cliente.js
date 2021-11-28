@@ -39,7 +39,7 @@ export default class AddCliente extends Component {
             auditoria: { operador: "OPERADOR 01" },
             found: true,
             searchEvent: false,
-            enviado: true
+            enviado: false
         };        
     }
     
@@ -71,27 +71,31 @@ export default class AddCliente extends Component {
         }
 
         ClienteService.create(data).then(response => {
-            this.setState({
-                idCliente: response.data.id,
-                nomeCliente: response.data.nome,
-                cpf: response.data.cpf,
-                endereco: response.data.endereco,
-                telefone: response.data.telefones,
-                email: response.data.emails,
-                enviado: true
-            });
-            console.log(response.data);
+            this.newCliente();
+            alert("CLIENTE CADASTRADO.");
+// console.log(response.data);
         }).catch(e => {
             console.log(e); // :..-(
         })
     }
 
-    newCliente() {
-        this.state({
-            id: null,
+    newCliente = () => {
+        this.setState({
             nomeCliente: "",
             cpf: "",
-            enviado: false
+            endereco : {
+                cep: "",
+                cidade: "",
+                logradouro: "",
+                bairro: "",
+                uf: "",
+                complemento: ""
+            },
+            tmpTelefone: "",
+            tmpTpPhone: "",
+            tmpEmail: "",
+            telefone: [],
+            email: []
         });
     }
 
@@ -196,15 +200,7 @@ export default class AddCliente extends Component {
             cpf, endereco, telefone, email, tmpTelefone } = this.state;
         return (
             <div className="submit-form">
-                {this.state.enviado ? (
-                    <Alert key={"1"} variant={"primary"}>
-                        Cliente Cadastrado.&nbsp; 
-                        <Alert.Link href={this.newCliente}>
-                            Novo Cliente
-                        </Alert.Link>
-                    </Alert>
-                ) : (
-                    <div className="col-md-8">
+                <div className="col-md-8">
                     <div style={styleContainer}>
                         <h3 style={styleTitulo}>Preencha os dados</h3>
                         <h8 style={styleWarning} id="lblWarning">
@@ -365,8 +361,7 @@ export default class AddCliente extends Component {
                             Cadastrar
                         </button>
                     </div>
-                    </div>
-                )}
+                </div>
             </div>
         );
     }
