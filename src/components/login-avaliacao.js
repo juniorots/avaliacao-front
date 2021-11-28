@@ -22,7 +22,15 @@ export default class LoginAvaliacao extends Component {
     }
 
     tryLogin = () => {
-
+        AvaliacaoService.validarUsuario(this.state.login, this.state.senha)
+        .then(response => {
+            this.setState({
+                perfilList: response.data.perfilList
+            });
+            // console.log(response.data);
+        }).catch(e => {            
+            console.log(e) // :..-(
+        })        
     }
 
     render() {
