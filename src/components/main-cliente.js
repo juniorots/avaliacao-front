@@ -29,8 +29,8 @@ export default class MainCliente extends Component {
             tmpTelefone: "",
             tmpTpPhone: "",
             tmpEmail: "",
-            telefone: [],
-            email: [],
+            telefones: [],
+            emails: [],
             tipoTelefone: [
                 { value : "residencial", label: "Residencial" },
                 { value : "comercial", label: "Comercial" },
@@ -77,9 +77,10 @@ export default class MainCliente extends Component {
                     auditoria: {
                         operador: response.data.auditoria.operador
                     },
-                    telefone: response.data.telefones,
-                    email: response.data.emails,
-                    found: true
+                    telefones: response.data.telefones,
+                    emails: response.data.emails,
+                    found: true,
+                    fullForm: true
                 });
                 console.log(response.data);
             }).catch(e => {
@@ -91,11 +92,10 @@ export default class MainCliente extends Component {
 
     updateCliente() {     
         if (!this.validator()) return;  // :..-(
-        AvaliacaoService.update(this.state.idCliente, this.state.cliente)
+
+        AvaliacaoService.update(this.state.idCliente, this.state)
             .then(response => {
-                this.setState({
-                    cliente: response.data,
-                });
+                alert("CLIENTE ATUALIZADO");
                 console.log(response.data);
             }).catch(e => {
                 console.log(e) // :..-(
@@ -105,10 +105,8 @@ export default class MainCliente extends Component {
     deleteCliente() {       
         AvaliacaoService.delete(this.state.cliente.id)
             .then(response => {
-                this.setState({
-                    found: false
-                });
-                console.log(response.data);
+                alert("EXCLUÍDO COM SUCESSO.");
+                this.setState({ found: false });                
             }).catch(e => {
                 console.log(e) // :..-(
             })
@@ -159,12 +157,12 @@ export default class MainCliente extends Component {
         let e = document.getElementById("nomeCliente");
         if (e.value.length > 0 && e.value.length < 4) return false; // :..-(
 
-        if (this.state.telefone.length === 0) {
+        if (this.state.telefones.length === 0) {
             alert("INSIRA PELO MENOS 1 TELEFONE");
             return false;
         }
 
-        if (this.state.email.length === 0) {
+        if (this.state.emails.length === 0) {
             alert("INSIRA PELO MENOS 1 E-MAIL");
             return false;
         }
@@ -201,19 +199,19 @@ export default class MainCliente extends Component {
 
     addPhone = () => {
         let e = document.getElementById("tmpTelefone");        
-        let list = this.state.telefone;        
+        let list = this.state.telefones;        
         list.push({tipo: this.state.tmpTpPhone, numero: e.value });
         this.setState({
-            telefone: list
+            telefones: list
         })
     }
 
     addEmail = () => {
         let e = document.getElementById("tmpEmail");        
-        let list = this.state.email;        
+        let list = this.state.emails;        
         list.push({email: e.value });
         this.setState({
-            email: list
+            emails: list
         })
     }
 
@@ -246,7 +244,7 @@ export default class MainCliente extends Component {
 
     render() {
         const { nomeCliente, found, tipoTelefone, tmpEmail,
-            nomePesquisa, cpf, searchEvent, endereco, telefone, email, tmpTelefone } = this.state;
+            nomePesquisa, cpf, searchEvent, endereco, telefones, emails, tmpTelefone } = this.state;
 
         return(
             <div className="list_row">
@@ -331,7 +329,7 @@ export default class MainCliente extends Component {
                                 </button>
                             </div>
                             </div>
-                            <TablePhone items={telefone}/>
+                            <TablePhone items={telefones}/>
 
                             <h8 style={styleWarning} id="warningEmail">
                                 E-mail inválido.
@@ -358,7 +356,7 @@ export default class MainCliente extends Component {
                                     </button>
                                     </div>
                             </div>     
-                            <TableEmail items={email}/>                          
+                            <TableEmail items={emails}/>                          
 
                             <h5 style={styleTitulo}>Endereço</h5>
                             <div id="errorendereco.cep" style={styleError}></div>
