@@ -39,7 +39,8 @@ export default class AddCliente extends Component {
             auditoria: { operador: "OPERADOR 01" },
             found: true,
             searchEvent: false,
-            enviado: false
+            enviado: false,
+            fullForm: true
         };        
     }
     
@@ -109,14 +110,16 @@ export default class AddCliente extends Component {
                 obj.target.value = this.state.tmpTelefone;
             });
         }
+        this.checkBlank(obj);
     }
 
     checkMinLength(obj) {
         let { value } = obj.target;
         let e = document.getElementById("lblWarning");
+        this.checkBlank(obj)
   
         if (value.length > 0 && value.length < 4) {
-            e.tabIndex="0";
+            // e.tabIndex="0";
             e.focus();
             e.style.display = "block";
             return;
@@ -127,8 +130,9 @@ export default class AddCliente extends Component {
     checkEmail(obj) {
         let { value } = obj.target;
         let e = document.getElementById("warningEmail");
+        this.checkBlank(obj);
         if (value !== undefined && !value.includes("@") && value.length > 0) {
-            e.tabIndex="0";
+            // e.tabIndex="0";
             e.focus();
             e.style.display = "block";
             return;
@@ -155,7 +159,10 @@ export default class AddCliente extends Component {
 
     getCep(obj) {
         let { value } = obj.target;
+        if ( value.length === 0) return;
+
         value = value.replace("-","").replace(".","");
+        this.checkBlank(obj);
 
         fetch(`https://viacep.com.br/ws/${value}/json/`)
         .then((resp) => resp.json())
@@ -195,6 +202,36 @@ export default class AddCliente extends Component {
         })
     }
 
+    onSubmit = e => {
+        e.preventDefault();
+    }
+
+    checkBlank = (obj) => {
+        let { name, value } = obj.target;
+        let e = document.getElementById("error"+name);
+        let fields = [
+            "nomeCliente",
+            "cpf",
+            "tmpTelefone",
+            "tmpEmail",
+            "endereco.cep",
+            "endereco.logradouro",
+            "endereco.bairro",
+            "endereco.cidade",
+            "endereco.uf"
+        ]
+        e.innerHTML = "";
+
+        if (value.length === 0) 
+            e.innerHTML = "* Obrigatório";     
+        
+        this.setState({ fullForm: true });
+        fields.map((field) => {
+            if (document.getElementById(field).value === "") 
+                this.setState({ fullForm: false }); 
+        });
+    }
+
     render() {
         const { nomeCliente, tipoTelefone, tmpEmail,
             cpf, endereco, telefone, email, tmpTelefone } = this.state;
@@ -206,6 +243,7 @@ export default class AddCliente extends Component {
                         <h8 style={styleWarning} id="lblWarning">
                             Aviso: Informe de 3 a 100 caracteres para o NOME
                         </h8>
+                        <div id="errornomeCliente" style={styleError}></div>
                         <input
                             type="text"
                             className="form-control"
@@ -213,24 +251,26 @@ export default class AddCliente extends Component {
                             name="nomeCliente"
                             id="nomeCliente"
                             placeHolder="Nome"
-                            required
                             value={nomeCliente}
                             onBlur={value => this.checkMinLength(value)}
                             onChange={value => this.onChangeHandler(value)}
                         />
+                        <div id="errorcpf" style={styleError}></div>
                         <InputMask
                             type="text"
                             className="form-control"
                             style={styleShortInput}
                             name="cpf"
+                            id="cpf"
                             mask="999.999.999-99"
                             maskChar=""
                             placeHolder="CPF"
-                            required
                             value={cpf}
+                            onBlur={ value => this.checkBlank(value)}
                             onChange={value => this.onChangeHandler(value)}
                         />
                         
+                        <div id="errortmpTelefone" style={styleError}></div>
                         <div className="input-group mb-3 w-40">
                             <Select 
                                 options={tipoTelefone} 
@@ -250,7 +290,6 @@ export default class AddCliente extends Component {
                                 name="tmpTelefone"
                                 id="tmpTelefone"
                                 placeHolder="TELEFONE"
-                                required
                                 value={tmpTelefone}
                                 onBlur={value => this.shapePhone(value)}
                                 onChange={value => this.onChangeHandler(value)}
@@ -269,6 +308,7 @@ export default class AddCliente extends Component {
                         <h8 style={styleWarning} id="warningEmail">
                             E-mail inválido.
                         </h8>
+                        <div id="errortmpEmail" style={styleError}></div>
                         <div className="input-group mb-3">
                             <input
                                 type="text"
@@ -276,8 +316,7 @@ export default class AddCliente extends Component {
                                 style={styleMediumInput}
                                 name="tmpEmail"
                                 id="tmpEmail"
-                                placeHolder="E-MAIL"
-                                required
+                                placeHolder="E-MAIL"                                
                                 value={tmpEmail}
                                 onBlur={value => this.checkEmail(value)}
                                 onChange={value => this.onChangeHandler(value)}
@@ -294,6 +333,7 @@ export default class AddCliente extends Component {
                         <TableEmail items={email}/>
 
                         <h5 style={styleTitulo}>Endereço</h5>
+                        <div id="errorendereco.cep" style={styleError}></div>
                         <InputMask
                             type="text"
                             className="form-control"
@@ -301,50 +341,58 @@ export default class AddCliente extends Component {
                             mask="99.999-999"
                             maskChar=""
                             name="endereco.cep"
+                            id="endereco.cep"
                             placeHolder="CEP"
-                            required
                             value={endereco.cep}
                             onBlur={value => this.getCep(value)}
                             onChange={value => this.onChangeHandler(value)}
                         />
+                        <div id="errorendereco.logradouro" style={styleError}></div>
                         <input
                             type="text"
                             className="form-control"
                             style={styleInput}
                             name="endereco.logradouro"
+                            id="endereco.logradouro"
                             placeHolder="LOGRADOURO"
-                            required
                             value={endereco.logradouro}
+                            onBlur={value => this.checkBlank(value)}
                             onChange={value => this.onChangeHandler(value)}
                         />
+                        <div id="errorendereco.bairro" style={styleError}></div>
                         <input
                             type="text"
                             className="form-control"
                             style={styleMediumInput}
                             name="endereco.bairro"
+                            id="endereco.bairro"
                             placeHolder="BAIRRO"
-                            required
                             value={endereco.bairro}
+                            onBlur={value => this.checkBlank(value)}
                             onChange={value => this.onChangeHandler(value)}
                         />
+                        <div id="errorendereco.cidade" style={styleError}></div>
                         <input
                             type="text"
                             className="form-control"
                             style={styleMediumInput}
                             name="endereco.cidade"
+                            id="endereco.cidade"
                             placeHolder="CIDADE"
-                            required
                             value={endereco.cidade}
+                            onBlur={value => this.checkBlank(value)}
                             onChange={value => this.onChangeHandler(value)}
                         />
+                        <div id="errorendereco.uf" style={styleError}></div>
                         <input
                             type="text"
                             className="form-control"
                             style={styleShortInput}
                             name="endereco.uf"
+                            id="endereco.uf"
                             placeHolder="UF"
-                            required
                             value={endereco.uf}
+                            onBlur={value => this.checkBlank(value)}
                             onChange={value => this.onChangeHandler(value)}
                         />
                         <input
@@ -357,7 +405,7 @@ export default class AddCliente extends Component {
                             onChange={value => this.onChangeHandler(value)}
                         />
 
-                        <button onClick={this.saveCliente} className="btn btn-success">
+                        <button onClick={this.saveCliente} className="btn btn-success" disabled={!this.state.fullForm}>
                             Cadastrar
                         </button>
                     </div>
@@ -396,4 +444,8 @@ const styleWarning = {
     color: "orange", 
     display: "none"   
 }
-
+const styleError = {
+    color: "red",
+    fontSize:13,
+    marginBottom: 2
+}

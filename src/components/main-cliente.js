@@ -37,7 +37,8 @@ export default class MainCliente extends Component {
             ],
             auditoria: { operador: "OPERADOR 01" },
             found: true,
-            searchEvent: false
+            searchEvent: false,
+            fullForm: false
         };        
     }
 
@@ -111,13 +112,16 @@ export default class MainCliente extends Component {
                 obj.target.value = this.state.tmpTelefone;
             });
         }
+        this.checkBlank(obj);
     }
 
     checkMinLength(obj) {
         let { value } = obj.target;
         let e = document.getElementById("lblWarning");
+        this.checkBlank(obj)
+
         if (value.length > 0 && value.length < 4) {
-            e.tabIndex="0";
+            // e.tabIndex="0";
             e.focus();
             e.style.display = "block";
             return;
@@ -128,8 +132,10 @@ export default class MainCliente extends Component {
     checkEmail(obj) {
         let { value } = obj.target;
         let e = document.getElementById("warningEmail");
+        this.checkBlank(obj);
+        
         if (value !== undefined && !value.includes("@") && value.length > 0) {
-            e.tabIndex="0";
+            // e.tabIndex="0";
             e.focus();
             e.style.display = "block";
             return;
@@ -156,7 +162,10 @@ export default class MainCliente extends Component {
 
     getCep(obj) {
         let { value } = obj.target;
+        if ( value.length === 0) return;
+        
         value = value.replace("-","").replace(".","");
+        this.checkBlank(obj);
 
         fetch(`https://viacep.com.br/ws/${value}/json/`)
         .then((resp) => resp.json())
@@ -196,6 +205,17 @@ export default class MainCliente extends Component {
         })
     }
 
+    checkBlank = (obj) => {
+        let { name, value } = obj.target;
+        let e = document.getElementById("error"+name);
+        this.setState({ fullForm: true });
+        e.innerHTML = "";
+        if (value.length === 0) {
+            e.innerHTML = "* Obrigatório";     
+            this.setState({ fullForm: false });
+        } 
+    }
+
     render() {
         const { nomeCliente, cliente, found, tipoTelefone, tmpEmail,
             nomePesquisa, cpf, searchEvent, endereco, telefone, email, tmpTelefone } = this.state;
@@ -229,6 +249,7 @@ export default class MainCliente extends Component {
                             <h8 style={styleWarning} id="lblWarning">
                                 Aviso: Informe de 3 a 100 caracteres para o NOME
                             </h8>
+                            <div id="errornomeCliente" style={styleError}></div>
                             <input
                                 type="text"
                                 className="form-control"
@@ -236,25 +257,27 @@ export default class MainCliente extends Component {
                                 name="nomeCliente"
                                 id="nomeCliente"
                                 placeHolder="Nome"
-                                required
                                 maxLength="100"                                
                                 value={nomeCliente}
                                 onBlur={value => this.checkMinLength(value)}
                                 onChange={value => this.onChangeHandler(value)}
                             />
+                            <div id="errorcpf" style={styleError}></div>
                             <InputMask
                                 type="text"
                                 className="form-control"
                                 style={styleShortInput}
                                 name="cpf"
+                                id="cpf"
                                 mask="999.999.999-99"
                                 maskChar=""
                                 placeHolder="CPF"
-                                required
                                 value={cpf}
+                                onBlur={ value => this.checkBlank(value)}
                                 onChange={value => this.onChangeHandler(value)}
                             />
-                                                        
+
+                            <div id="errortmpTelefone" style={styleError}></div>                            
                             <div className="input-group mb-3 w-40">
                                 <Select options={tipoTelefone}/>
                                 <InputMask
@@ -266,7 +289,6 @@ export default class MainCliente extends Component {
                                 name="tmpTelefone"
                                 id="tmpTelefone"
                                 placeHolder="TELEFONE"
-                                required
                                 value={tmpTelefone}
                                 onBlur={value => this.shapePhone(value)}
                                 onChange={value => this.onChangeHandler(value)}
@@ -285,6 +307,7 @@ export default class MainCliente extends Component {
                             <h8 style={styleWarning} id="warningEmail">
                                 E-mail inválido.
                             </h8>
+                            <div id="errortmpEmail" style={styleError}></div>
                             <div className="input-group mb-1">
                                 <input
                                     type="text"
@@ -293,7 +316,6 @@ export default class MainCliente extends Component {
                                     name="tmpEmail"
                                     id="tmpEmail"
                                     placeHolder="E-MAIL"
-                                    required
                                     value={tmpEmail}
                                     onBlur={tmpEmail => this.checkEmail(tmpEmail)}
                                     onChange={value => this.onChangeHandler(value)}
@@ -310,6 +332,7 @@ export default class MainCliente extends Component {
                             <TableEmail items={email}/>                          
 
                             <h5 style={styleTitulo}>Endereço</h5>
+                            <div id="errorendereco.cep" style={styleError}></div>
                             <InputMask
                                 type="text"
                                 className="form-control"
@@ -317,50 +340,58 @@ export default class MainCliente extends Component {
                                 mask="99.999-999"
                                 maskChar=""
                                 name="endereco.cep"
+                                id="endereco.cep"
                                 placeHolder="CEP"
-                                required
                                 value={endereco.cep}
                                 onBlur={value => this.getCep(value)}
                                 onChange={value => this.onChangeHandler(value)}
                             />
+                            <div id="errorendereco.logradouro" style={styleError}></div>
                             <input
                                 type="text"
                                 className="form-control"
                                 style={styleInput}
                                 name="endereco.logradouro"
+                                id="endereco.logradouro"
                                 placeHolder="LOGRADOURO"
-                                required
                                 value={endereco.logradouro}
+                                onBlur={value => this.checkBlank(value)}
                                 onChange={value => this.onChangeHandler(value)}
                             />
+                            <div id="errorendereco.bairro" style={styleError}></div>
                             <input
                                 type="text"
                                 className="form-control"
                                 style={styleMediumInput}
                                 name="endereco.bairro"
+                                id="endereco.bairro"
                                 placeHolder="BAIRRO"
-                                required
                                 value={endereco.bairro}
+                                onBlur={value => this.checkBlank(value)}
                                 onChange={value => this.onChangeHandler(value)}
                             />
+                            <div id="errorendereco.cidade" style={styleError}></div>
                             <input
                                 type="text"
                                 className="form-control"
                                 style={styleMediumInput}
                                 name="endereco.cidade"
-                                placeHolder="CIDADE"
-                                required
+                                id="endereco.cidade"
+                                placeHolder="CIDADE"                                
                                 value={endereco.cidade}
+                                onBlur={value => this.checkBlank(value)}
                                 onChange={value => this.onChangeHandler(value)}
                             />
+                            <div id="errorendereco.uf" style={styleError}></div>
                             <input
                                 type="text"
                                 className="form-control"
                                 style={styleShortInput}
                                 name="endereco.uf"
+                                id="endereco.uf"
                                 placeHolder="UF"
-                                required
                                 value={endereco.uf}
+                                onBlur={value => this.checkBlank(value)}
                                 onChange={value => this.onChangeHandler(value)}
                             />
                             <input
@@ -429,7 +460,11 @@ const styleWarning = {
     color: "orange", 
     display: "none"   
 }
-
+const styleError = {
+    color: "red",
+    fontSize:13,
+    marginBottom: 2
+}
 
 
 
