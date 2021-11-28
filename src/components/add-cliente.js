@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import Alert from "react-bootstrap/Alert";
+import TablePhone from "./table-phone";
+import TableEmail from "./table-email";
 import ClienteService from "../services/avaliacao.service";
 import InputMask from "react-input-mask";
 import Select from 'react-select'
@@ -118,9 +120,9 @@ export default class AddCliente extends Component {
     }
 
     checkEmail(obj) {
-        let { value } = obj.target;
+        let { tmpEmail } = obj.target;
         let e = document.getElementById("warningEmail");
-        if (!value.includes("@") && value.length > 0) {
+        if (tmpEmail !== undefined && !tmpEmail.includes("@") && tmpEmail.length > 0) {
             e.tabIndex="0";
             e.focus();
             e.style.display = "block";
@@ -131,7 +133,7 @@ export default class AddCliente extends Component {
 
     validator() {
         let e = document.getElementByName("nomeCliente");
-        if (value.length > 0 && value.length < 4) return false;
+        if (e.value.length > 0 && e.value.length < 4) return false;
 
         return true;
     }
@@ -202,6 +204,7 @@ export default class AddCliente extends Component {
                                 </button>
                                 </div>
                         </div>
+                        <TablePhone items={telefone}/>
 
                         <h8 style={styleWarning} id="warningEmail">
                             E-mail inválido.
@@ -227,6 +230,7 @@ export default class AddCliente extends Component {
                                 </button>
                                 </div>
                         </div>   
+                        <TableEmail items={email}/>
 
                         <h5 style={styleTitulo}>Endereço</h5>
                         <InputMask
@@ -331,5 +335,4 @@ const styleWarning = {
     color: "orange", 
     display: "none"   
 }
-
 
