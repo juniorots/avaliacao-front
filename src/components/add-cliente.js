@@ -16,6 +16,7 @@ export default class AddCliente extends Component {
             cliente: {id: "", nome:"teste"},
             idCliente: "",
             nomeCliente: "",
+            cpf: "",
             nomePesquisa: "",
             endereco: {
                 cep: "",
@@ -26,24 +27,16 @@ export default class AddCliente extends Component {
                 complemento: ""
             },
             tmpTelefone: "",
-            telefone: [
-                {
-                    tipo: "",
-                    numero: ""
-                }
-            ],
+            tmpTpPhone: "",
+            telefone: [],
             tmpEmail: "",
-            email: [
-                {
-                    endereco: ""
-                }
-            ],
+            email: [],
             tipoTelefone: [
                 { value : "residencial", label: "Residencial" },
                 { value : "comercial", label: "Comercial" },
                 { value : "celular", label: "Celular" }
             ],
-            operador: "",
+            operador: "OPERADOR 01",
             found: true,
             searchEvent: false,
             enviado: false
@@ -66,13 +59,18 @@ export default class AddCliente extends Component {
         });
     }
     
-    saveCliente() {
+    saveCliente = () => {
         if (!this.validator()) return;
         var data = {
             nome: this.state.nomeCliente,
-            cpf: this.state.cpf
+            cpf: this.state.cpf,
+            endereco: this.state.endereco,
+            telefone: this.state.telefone,
+            email: this.state.email,
+            operador: this.state.operador
         }
-        
+console.log(data); return;
+
         ClienteService.create(data).then(response => {
             this.setState({
                 id: response.data.id,
@@ -110,6 +108,7 @@ export default class AddCliente extends Component {
     checkMinLength(obj) {
         let { value } = obj.target;
         let e = document.getElementById("lblWarning");
+  
         if (value.length > 0 && value.length < 4) {
             e.tabIndex="0";
             e.focus();
@@ -120,9 +119,9 @@ export default class AddCliente extends Component {
     }
 
     checkEmail(obj) {
-        let { tmpEmail } = obj.target;
+        let { value } = obj.target;
         let e = document.getElementById("warningEmail");
-        if (tmpEmail !== undefined && !tmpEmail.includes("@") && tmpEmail.length > 0) {
+        if (value !== undefined && !value.includes("@") && value.length > 0) {
             e.tabIndex="0";
             e.focus();
             e.style.display = "block";
@@ -131,9 +130,19 @@ export default class AddCliente extends Component {
         e.style.display = "none";
     }
 
-    validator() {
-        let e = document.getElementByName("nomeCliente");
+    validator = () => {
+        let e = document.getElementById("nomeCliente");
         if (e.value.length > 0 && e.value.length < 4) return false;
+
+        if (this.state.telefone.length === 0) {
+            alert("INSIRA PELO MENOS 1 TELEFONE");
+            return false;
+        }
+
+        if (this.state.email.length === 0) {
+            alert("INSIRA PELO MENOS 1 E-MAIL");
+            return false;
+        }
 
         return true;
     }
@@ -152,13 +161,31 @@ export default class AddCliente extends Component {
             this.setState({
                 endereco: {
                     uf: data.uf,
-                    cidade: data.cidade,
+                    cidade: data.localidade,
                     bairro: data.bairro,
                     logradouro: data.logradouro
                 }
             })
         })
         .catch(erro => console.log(erro));
+    }
+
+    addPhone = () => {
+        let e = document.getElementById("tmpTelefone");        
+        let list = this.state.telefone;        
+        list.push({tipo: this.state.tmpTpPhone, numero: e.value });
+        this.setState({
+            telefone: list
+        })
+    }
+
+    addEmail = () => {
+        let e = document.getElementById("tmpEmail");        
+        let list = this.state.email;        
+        list.push({endereco: e.value });
+        this.setState({
+            email: list
+        })
     }
 
     render() {
@@ -185,9 +212,11 @@ export default class AddCliente extends Component {
                             className="form-control"
                             style={styleInput}                                                        
                             name="nomeCliente"
+                            id="nomeCliente"
                             placeHolder="Nome"
                             required
                             value={nomeCliente}
+                            onBlur={value => this.checkMinLength(value)}
                             onChange={value => this.onChangeHandler(value)}
                         />
                         <InputMask
@@ -204,7 +233,15 @@ export default class AddCliente extends Component {
                         />
                         
                         <div className="input-group mb-3 w-40">
-                            <Select options={tipoTelefone} />
+                            <Select 
+                                options={tipoTelefone} 
+                                onChange={e => {
+                                    this.setState({
+                                        tmpTpPhone: e.value
+                                    }, () => {
+                                        // console.log(this.state.tmpTpPhone);
+                                    })
+                                }}/>
                             <InputMask
                                 type="text"
                                 className="form-control"
@@ -212,6 +249,7 @@ export default class AddCliente extends Component {
                                 mask={tmpTelefone < 11 ? "(99) 9999-9999" : "(99) 99999-9999" }
                                 maskChar=""
                                 name="tmpTelefone"
+                                id="tmpTelefone"
                                 placeHolder="TELEFONE"
                                 required
                                 value={tmpTelefone}
@@ -222,10 +260,10 @@ export default class AddCliente extends Component {
                                 <button 
                                     className="btn btn-outline-secondary"
                                     type="button"
-                                    onClick="{this.addTelefone}">
+                                    onClick={this.addPhone}>
                                         Adicionar
                                 </button>
-                                </div>
+                            </div>
                         </div>
                         <TablePhone items={telefone}/>
 
@@ -238,6 +276,7 @@ export default class AddCliente extends Component {
                                 className="form-control"
                                 style={styleMediumInput}
                                 name="tmpEmail"
+                                id="tmpEmail"
                                 placeHolder="E-MAIL"
                                 required
                                 value={tmpEmail}
@@ -248,7 +287,7 @@ export default class AddCliente extends Component {
                                 <button 
                                     className="btn btn-outline-secondary"
                                     type="button"
-                                    onClick="{this.addEmail}">
+                                    onClick={this.addEmail}>
                                         Adicionar
                                 </button>
                                 </div>
@@ -319,7 +358,7 @@ export default class AddCliente extends Component {
                             onChange={value => this.onChangeHandler(value)}
                         />
 
-                        <button onClick="{this.saveCliente}" className="btn btn-success">
+                        <button onClick={this.saveCliente} className="btn btn-success">
                             Cadastrar
                         </button>
                     </div>
