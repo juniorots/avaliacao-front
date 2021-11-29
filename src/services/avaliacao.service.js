@@ -16,8 +16,9 @@ class ClienteService {
     delete(id) {
         return http.delete(`/clientes/${id}`);
     }
+
     validarUsuario(data) {
-        return http.get(`/usuario/`, data)
+        return http.post("/validarAcesso", data)
     }
 }
 

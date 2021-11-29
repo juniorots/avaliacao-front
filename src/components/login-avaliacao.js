@@ -39,14 +39,14 @@ export default class LoginAvaliacao extends Component {
             this.setState({ toElement: url });
             // console.log(response.data);
         }).catch(e => {            
-            alert("PROBLEMA COM LOGIN.");
+            alert("FALHA NO SERVIDOR, AGUARDE ALGUNS MINUTOS.");
             console.log(e) // :..-(
         })        
     }
 
     render() {        
         const { login, senha } = this.state;
-        if (this.state.toElement) return (<Navigate to={this.state.toElement} props={this.state} />);
+        if (this.state.toElement) return (<Navigate to={this.state.toElement} />);
         return (            
             <div className="container d-flex justify-content-center">
                 <div className="card mt-5 w-40">
@@ -58,7 +58,7 @@ export default class LoginAvaliacao extends Component {
                                     type="text"
                                     className="form-control"
                                     style={styleInput}
-                                    placeHolder="LOGIN" 
+                                    placeholder="LOGIN" 
                                     name="login"
                                     value={login}
                                     onChange={value => this.onChangeHandler(value)}
@@ -67,7 +67,7 @@ export default class LoginAvaliacao extends Component {
                                     type="password"
                                     className="form-control"
                                     style={styleInput}
-                                    placeHolder="***" 
+                                    placeholder="***" 
                                     name="senha"
                                     value={senha}
                                     onChange={value => this.onChangeHandler(value)}
