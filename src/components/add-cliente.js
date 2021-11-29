@@ -34,7 +34,7 @@ export default class AddCliente extends Component {
                 { value : "comercial", label: "Comercial" },
                 { value : "celular", label: "Celular" }
             ],
-            auditoria: { operador: "OPERADOR 01" },
+            auditoria: { operador: localStorage.getItem("usr") },
             found: true,
             searchEvent: false,
             enviado: false,

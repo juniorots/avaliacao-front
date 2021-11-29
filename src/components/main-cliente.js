@@ -38,7 +38,7 @@ export default class MainCliente extends Component {
                 { value : "comercial", label: "Comercial" },
                 { value : "celular", label: "Celular" }
             ],
-            auditoria: { operador: "OPERADOR 01" },
+            auditoria: { operador: localStorage.getItem("usr") },
             found: false,
             searchEvent: false,
             fullForm: false,
@@ -76,10 +76,7 @@ export default class MainCliente extends Component {
                         cidade: response.data.endereco.cidade,
                         uf: response.data.endereco.uf,
                         complemento: response.data.endereco.complemento
-                    },
-                    auditoria: {
-                        operador: response.data.auditoria.operador
-                    },
+                    },                    
                     telefones: response.data.telefones,
                     emails: response.data.emails,
                     found: true,
