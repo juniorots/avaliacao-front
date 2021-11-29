@@ -1,17 +1,16 @@
 import React, { Component } from "react";
-import Alert from "react-bootstrap/Alert";
+import { useLocation } from "react-router-dom";
 import TablePhone from "./table-phone";
 import TableEmail from "./table-email";
 import ClienteService from "../services/avaliacao.service";
 import InputMask from "react-input-mask";
 import Select from 'react-select'
+import HomeCliente from "./home-cliente";
 
 export default class AddCliente extends Component {
     constructor(props) {
         super(props);
-        // this.saveCliente = this.salvarCliente.bind(this);
-        // this.newCliente = this.newCliente.bind(this);
-
+        
         this.state = {
             cliente: {id: "", nome:"teste"},
             idCliente: "",
@@ -236,7 +235,8 @@ export default class AddCliente extends Component {
         const { nomeCliente, tipoTelefone, tmpEmail,
             cpf, endereco, telefone, email, tmpTelefone } = this.state;
         return (
-            <div className="submit-form">
+            <div className="submit-form">    
+                <HomeCliente />            
                 <div className="col-md-8">
                     <div style={styleContainer}>
                         <h3 style={styleTitulo}>Preencha os dados</h3>

@@ -1,37 +1,26 @@
 import React, { Component } from "react";
-import { Link, Routes, Route } from "react-router-dom";
+import { Routes, Route, Link } from "react-router-dom";
 
 import "bootstrap/dist/css/bootstrap.min.css"
 
+import LoginAvaliacao from "./components/login-avaliacao";
 import AddCliente from "./components/add-cliente";
 import MainCliente from "./components/main-cliente";
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+  }
   render() {
-    return (
-      <div>
-        <nav className="navbar navbar-expand navbar-blue bg-blue">      
-          <div className="navbar-nav mr-auto">
-            <li className="nav-item">
-              <Link to={"/clientes"} className="nav-link">
-                Pesquisar Cliente
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to={"/add-clientes"} className="nav-link">
-                Adicionar Cliente
-              </Link>
-            </li>
-          </div>        
-        </nav>
-
-        <div className="container mt-3"> 
-          <Routes>
-            <Route path="/clientes" element={<MainCliente/>} />
-            <Route path="/add-clientes" element={<AddCliente/>} />
-          </Routes>
-        </div>
-      </div>    
+    return (                 
+      <div className="container mt-3">
+        <Routes>
+          <Route exact path="/login-avaliacao" element={<LoginAvaliacao />} />                  
+          <Route exact path="/" element={<LoginAvaliacao />} />   
+          <Route path="/clientes" element={<MainCliente />} />
+          <Route path="/add-clientes" element={<AddCliente/>} />
+        </Routes>      
+      </div>
     );
   } 
 }

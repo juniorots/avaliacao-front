@@ -3,15 +3,15 @@ import React from "react";
 const TableEmail = props => {
     let { items } = props;
     
-    const removerItem = value => {
-        let list = items;
-        let i = list.indexOf(value);
-        if (i !== -1 ) {
-            list.slice(i, 1);
-            items = list;
-        }
-        console.log(i)
-    }
+    // const removerItem = value => {
+    //     let list = items;
+    //     let i = list.indexOf(value);
+    //     if (i !== -1 ) {
+    //         list.slice(i, 1);
+    //         items = list;
+    //     }
+    //     console.log(i)
+    // }
 
     return (
         <table style={styleTable}>
@@ -48,13 +48,13 @@ const styleLine = {
     paddingBottom: 15
 }
 
-const styleButton = {
-    marginLeft: 3,
-    backgroundColor: "#dfe2ed",
-    color: "#4f62ab",
-    borderWidth: 1,
-    borderColor: "#1a40c9",
-    fontSize: 13
-}
+// const styleButton = {
+//     marginLeft: 3,
+//     backgroundColor: "#dfe2ed",
+//     color: "#4f62ab",
+//     borderWidth: 1,
+//     borderColor: "#1a40c9",
+//     fontSize: 13
+// }
 
 export default TableEmail;

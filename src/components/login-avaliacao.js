@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import AvaliacaoService from "../services/avaliacao.service";
+import { Routes, Route, Link, Navigate } from "react-router-dom";
 
 export default class LoginAvaliacao extends Component {
     constructor(props) {
@@ -11,60 +12,77 @@ export default class LoginAvaliacao extends Component {
                 {
                     nomePerfil: ""
                 }
-            ]
+            ],
+            // toElement: "/home-cliente"
+            toElement: null
         }
     }
 
-    onChangeHandler = (field, value) => {        
+    onChangeHandler = (obj) => {    
+        let { name, value } = obj.target;    
         this.setState({
-            [field]: value
+            [name]: value
         });
     }
 
-    tryLogin = () => {
-        AvaliacaoService.validarUsuario(this.state.login, this.state.senha)
+    tryLogin = () => {          
+        let data = {
+            login: this.state.login,
+            senha: this.state.senha
+        }
+        AvaliacaoService.validarUsuario(data)
         .then(response => {
             this.setState({
                 perfilList: response.data.perfilList
             });
+            let url = "/clientes?usr="+this.state.login;
+            this.setState({ toElement: url });
             // console.log(response.data);
         }).catch(e => {            
+            alert("PROBLEMA COM LOGIN.");
             console.log(e) // :..-(
         })        
     }
 
-    render() {
+    render() {        
         const { login, senha } = this.state;
-        return (
-            <form>
-            <div className="list_row">
-                <div className="col-md-8">
-                <input 
-                    type="text"
-                    className="form-control"
-                    style={styleInput}
-                    placeHolder="LOGIN" 
-                    name="login"
-                    value={login}
-                    onChange={value => this.onChangeHandler(value)}
-                />
-                <input 
-                    type="text"
-                    className="form-control"
-                    style={styleInput}
-                    placeHolder="***" 
-                    secureTextEntry
-                    name="login"
-                    value={senha}
-                    onChange={value => this.onChangeHandler(value)}
-                />
-                <Button 
-                    title="Entrar" 
-                    onPress={() => this.tryLogin()}
-                />
-                </div>
+        if (this.state.toElement) return (<Navigate to={this.state.toElement} props={this.state} />);
+        return (            
+            <div className="container d-flex justify-content-center">
+                <div className="card mt-5 w-40">
+                    <div className="card-body">
+                        <form>
+                            <div className="list_row">
+                                <div className="col-md-8">
+                                <input 
+                                    type="text"
+                                    className="form-control"
+                                    style={styleInput}
+                                    placeHolder="LOGIN" 
+                                    name="login"
+                                    value={login}
+                                    onChange={value => this.onChangeHandler(value)}
+                                />
+                                <input 
+                                    type="password"
+                                    className="form-control"
+                                    style={styleInput}
+                                    placeHolder="***" 
+                                    name="senha"
+                                    value={senha}
+                                    onChange={value => this.onChangeHandler(value)}
+                                />
+                                <button                                     
+                                    className="btn btn-primary"
+                                    onClick={() => this.tryLogin()}>
+                                        Entrar
+                                </button>
+                                </div>
+                            </div>            
+                        </form>
+                    </div>
+                </div>    
             </div>
-            </form>
         );
     }
 }
@@ -72,5 +90,5 @@ export default class LoginAvaliacao extends Component {
 const styleInput = {
     marginRight: 5,   
     marginBottom: 5,
-    width: 200
+    width: 250
 }

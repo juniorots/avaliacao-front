@@ -4,10 +4,13 @@ import TablePhone from "./table-phone";
 import TableEmail from "./table-email";
 import InputMask from "react-input-mask";
 import Select from 'react-select'
+import HomeCliente from "./home-cliente";
 
 export default class MainCliente extends Component {
     constructor(props) {
-        super(props);        
+        super(props);    
+// console.log(window.location.search);
+
         this.searchCliente = this.searchCliente.bind(this);
         this.updateCliente = this.updateCliente.bind(this);
         this.deleteCliente = this.deleteCliente.bind(this);
@@ -246,6 +249,7 @@ export default class MainCliente extends Component {
 
         return(
             <div className="list_row">
+                <HomeCliente />
                 <div className="col-md-8">
                     <div className="input-group mb-3">
                         <input 
@@ -492,10 +496,6 @@ const styleError = {
     fontSize:13,
     marginBottom: 2
 }
-const styleMessage = {
-    addingTop: 10,
-    color: "#0d6efd",
-    fontSize:20,    
-}
+
 
 
