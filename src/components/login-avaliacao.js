@@ -2,10 +2,6 @@ import React, { Component } from "react";
 import AvaliacaoService from "../services/avaliacao.service";
 import { Navigate } from "react-router-dom";
 
-export const isLogado = () => {
-    return this.state.perfilList[0].nomePerfil!==null;
-}
-
 export default class LoginAvaliacao extends Component {
     constructor(props) {
         super(props);
@@ -38,18 +34,19 @@ export default class LoginAvaliacao extends Component {
             this.setState({
                 perfilList: response.data.perfilList
             });
-            let url = "/clientes?u="+this.state.login+"&p="+this.state.perfilList[0].nomePerfil;
+            localStorage.setItem("perfil", this.state.perfilList[0].nomePerfil);
+            // let url = "/clientes?u="+this.state.login+"&p="+this.state.perfilList[0].nomePerfil;
+            let url = "/clientes";
             this.setState({ toElement: url });         
         }).catch(e => {   
             this.setState({ perfilList: [{nomePerfil: null }]})         
+            localStorage.setItem("perfil", this.state.perfilList[0].nomePerfil);
             alert("FALHA, VERIFIQUE SEU LOGIN E SENHA.");
             console.log(e) // :..-(
         }) 
     }
     
-    render() {        
-       
-
+    render() {          
         const { login, senha } = this.state;
         if (this.state.toElement) return (<Navigate to={this.state.toElement} />);
         return (            

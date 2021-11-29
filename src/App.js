@@ -5,15 +5,14 @@ import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css"
 
 import LoginAvaliacao from "./components/login-avaliacao";
-import { isLogado } from "./components/login-avaliacao";
 import AddCliente from "./components/add-cliente";
 import MainCliente from "./components/main-cliente";
 
 export const ControlAccess = ({children}) => {
   let location = useLocation();
-console.log(isLogado);
-    if (false)       
+    if (localStorage.getItem("perfil") === "null")       
       return <Navigate to="/login-avaliacao" state={{ from: location }} />;
+
     return children;    
 };  
 
