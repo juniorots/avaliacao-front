@@ -12,7 +12,7 @@ import MainCliente from "./components/main-cliente";
 export const ControlAccess = ({children}) => {
   let location = useLocation();
 console.log(isLogado);
-    if (isLogado)       
+    if (false)       
       return <Navigate to="/login-avaliacao" state={{ from: location }} />;
     return children;    
 };  
@@ -23,11 +23,9 @@ class App extends Component {
       <div className="container mt-3">
         <Routes>
           <Route path="/login-avaliacao" element={<LoginAvaliacao />} />                  
-          <Route exact path="/" element={<LoginAvaliacao />} />   
-          <Route path="/clientes" component={<MainCliente />} />
-          
-          {/* <Route path="/clientes" component={<ControlAccess> <MainCliente /> </ControlAccess>} />
-          <Route path="/add-clientes" component={<ControlAccess> <AddCliente/> </ControlAccess>} /> */}
+          <Route exact path="/" element={<LoginAvaliacao />} />            
+          <Route path="/clientes" element={<ControlAccess> <MainCliente /> </ControlAccess>} />
+          <Route path="/add-clientes" element={<ControlAccess> <AddCliente/> </ControlAccess>} />
         </Routes>
       </div>
     );
