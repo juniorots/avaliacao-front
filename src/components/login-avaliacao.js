@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import AvaliacaoService from "../services/avaliacao.service";
-import { Routes, Route, Link, Navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 export default class LoginAvaliacao extends Component {
     constructor(props) {
@@ -13,7 +13,6 @@ export default class LoginAvaliacao extends Component {
                     nomePerfil: ""
                 }
             ],
-            // toElement: "/home-cliente"
             toElement: null
         }
     }
@@ -25,6 +24,10 @@ export default class LoginAvaliacao extends Component {
         });
     }
 
+    teste = () => {
+        console.log("TESTE");
+    }
+
     tryLogin = () => {          
         let data = {
             login: this.state.login,
@@ -32,26 +35,29 @@ export default class LoginAvaliacao extends Component {
         }
         AvaliacaoService.validarUsuario(data)
         .then(response => {
-            this.setState({
-                perfilList: response.data.perfilList
-            });
-            let url = "/clientes?usr="+this.state.login;
-            this.setState({ toElement: url });
-            // console.log(response.data);
+console.log(response.data);            
+            // this.setState({
+            //     perfilList: response.data.perfilList
+            // });
+            // let url = "/clientes?u="+this.state.login+"p="+this.state.perfilList[0].nomePerfil;
+            // // let url = "/clientes";
+            // this.setState({ toElement: url }, () => {
+            //     console.log(this.state.toElement);
+            // });            
         }).catch(e => {            
-            alert("FALHA NO SERVIDOR, AGUARDE ALGUNS MINUTOS.");
+            alert("FALHA, VERIFIQUE SEU LOGIN E SENHA.");
             console.log(e) // :..-(
-        })        
+        }) 
     }
 
     render() {        
         const { login, senha } = this.state;
-        if (this.state.toElement) return (<Navigate to={this.state.toElement} />);
+        // if (this.state.toElement) return (<Navigate to={this.state.toElement} />);
         return (            
             <div className="container d-flex justify-content-center">
                 <div className="card mt-5 w-40">
                     <div className="card-body">
-                        <form>
+
                             <div className="list_row">
                                 <div className="col-md-8">
                                 <input 
@@ -74,12 +80,12 @@ export default class LoginAvaliacao extends Component {
                                 />
                                 <button                                     
                                     className="btn btn-primary"
-                                    onClick={() => this.tryLogin()}>
+                                    onClick={this.teste()}>
                                         Entrar
                                 </button>
                                 </div>
                             </div>            
-                        </form>
+
                     </div>
                 </div>    
             </div>

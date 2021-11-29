@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { useLocation } from "react-router-dom";
 import TablePhone from "./table-phone";
 import TableEmail from "./table-email";
 import ClienteService from "../services/avaliacao.service";
