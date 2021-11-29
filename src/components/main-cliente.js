@@ -41,7 +41,8 @@ export default class MainCliente extends Component {
             auditoria: { operador: "OPERADOR 01" },
             found: false,
             searchEvent: false,
-            fullForm: false
+            fullForm: false,
+            adminUser: false
         };        
     }
 
@@ -84,9 +85,12 @@ export default class MainCliente extends Component {
                     found: true,
                     fullForm: true
                 });
+                if (localStorage.getItem("perfil") === "admin")
+                    this.setState({ adminUser: true });
                 // console.log(response.data);
             }).catch(e => {
                 this.setState({ found: false })
+                this.setState({ adminUser: false });
                 console.log(e) // :..-(
             })
             this.setState({ searchEvent: true })
@@ -244,7 +248,7 @@ export default class MainCliente extends Component {
 
 
     render() {
-        const { nome, found, tipoTelefone, tmpEmail,
+        const { nome, found, tipoTelefone, tmpEmail, adminUser,
             nomePesquisa, cpf, searchEvent, endereco, telefones, emails, tmpTelefone } = this.state;
 
         return(
@@ -432,20 +436,23 @@ export default class MainCliente extends Component {
                                 value={endereco.complemento}
                                 onChange={value => this.onChangeHandler(value)}
                             />                                       
+                            {( adminUser &&
+                                <div>
+                                    <button
+                                        className="btn btn-success" style={styleButton}
+                                        onClick={this.updateCliente} 
+                                        disabled={!this.state.fullForm}>
+                                        Atualizar
+                                    </button>
 
-                            <button
-                                className="btn btn-success" style={styleButton}
-                                onClick={this.updateCliente} 
-                                disabled={!this.state.fullForm}>
-                                Atualizar
-                            </button>
-
-                            <button
-                                className="btn btn-warning" style={styleButton}
-                                onClick={this.deleteCliente} 
-                                disabled={!this.state.fullForm}>
-                                Apagar
-                            </button>
+                                    <button
+                                        className="btn btn-warning" style={styleButton}
+                                        onClick={this.deleteCliente} 
+                                        disabled={!this.state.fullForm}>
+                                        Apagar
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     ) : (
                         (searchEvent && 
