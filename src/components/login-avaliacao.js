@@ -35,6 +35,7 @@ export default class LoginAvaliacao extends Component {
                 perfilList: response.data.perfilList
             });
             localStorage.setItem("perfil", this.state.perfilList[0].nomePerfil);
+            localStorage.setItem("usr", this.state.login);
             // let url = "/clientes?u="+this.state.login+"&p="+this.state.perfilList[0].nomePerfil;
             let url = "/clientes";
             this.setState({ toElement: url });         

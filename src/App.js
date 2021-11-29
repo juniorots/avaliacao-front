@@ -16,6 +16,14 @@ export const ControlAccess = ({children}) => {
     return children;    
 };  
 
+export const ControlAdmin = ({children}) => {
+  let location = useLocation();
+    if (localStorage.getItem("perfil") === "comum")       
+      return <Navigate to="/clientes" state={{ from: location }} />;
+
+    return children;    
+};  
+
 class App extends Component {  
   render() {
     return (                 
@@ -24,7 +32,14 @@ class App extends Component {
           <Route path="/login-avaliacao" element={<LoginAvaliacao />} />                  
           <Route exact path="/" element={<LoginAvaliacao />} />            
           <Route path="/clientes" element={<ControlAccess> <MainCliente /> </ControlAccess>} />
-          <Route path="/add-clientes" element={<ControlAccess> <AddCliente/> </ControlAccess>} />
+          <Route path="/add-clientes" 
+            element={
+                <ControlAccess> 
+                  <ControlAdmin> 
+                    <AddCliente/> 
+                  </ControlAdmin> 
+                </ControlAccess>} 
+            />
         </Routes>
       </div>
     );
