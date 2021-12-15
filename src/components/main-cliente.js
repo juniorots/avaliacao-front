@@ -38,7 +38,7 @@ export default class MainCliente extends Component {
                 { value : "comercial", label: "Comercial" },
                 { value : "celular", label: "Celular" }
             ],
-            auditoria: { operador: localStorage.getItem("usr") },
+            auditoria: { operador: localStorage.getItem("usr"), data: new Date()  },
             found: false,
             searchEvent: false,
             fullForm: false,
